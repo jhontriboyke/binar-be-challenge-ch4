@@ -1,34 +1,26 @@
-// 1
-const express = require('express');
-const pool = require('./db');
+const express = require("express");
+const pool = require("./db");
+require("dotenv").config();
 
-// 2
 // Mendefinisikan aplikasi express
 const app = express();
+
 // Mendefinisikan middleware
 app.use(express.json());
 
-// 3
-// Mendefinisikan route
-// Basic route
-app.get('/', (req, res) => {
-	res.send('Hello, World!');
-});
-
 // Get all kecamatan
-app.get('/kecamatan', async (req, res) => {
-	try {
-		const result = await pool.query('SELECT * FROM kecamatan');
-		res.json(result.rows);
-	} catch (err) {
-		console.error(err.message);
-		res.status(500).send('Server Error');
-	}
+app.get("/kecamatan", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT * FROM kecamatan");
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
 });
 
-// 4
 // Definisi Port dan menjalankan server
-const PORT = 5000;
+const PORT = process.env.SERVER_PORT;
 app.listen(PORT, () => {
-	console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
