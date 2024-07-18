@@ -1,15 +1,17 @@
-const pool = require("../db/index");
 const { Router } = require("express");
-
 const router = Router();
+const UserController = require("../controllers/users.controller");
 
-router.get("/", async (req, res) => {
-  try {
-    const results = await pool.query("SELECT * FROM users;");
-    res.status(200).json(results.rows);
-  } catch (error) {
-    res.status(404).json({ message: "Something went wrong" });
-  }
-});
+// GET all users
+router.get("/", UserController.getAllUsers);
+
+// GET user by id
+router.get("/:id", UserController.getUserById);
+
+// POST user
+router.post("/", UserController.createUser);
+
+// DELETE user
+router.delete("/:id", UserController.deleteUserById);
 
 module.exports = router;

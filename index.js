@@ -1,6 +1,5 @@
 const express = require("express");
-const pool = require("./db");
-const usersRoutes = require("./routes/users.route");
+const morgan = require("morgan");
 
 require("dotenv").config();
 
@@ -9,7 +8,12 @@ const app = express();
 
 // Mendefinisikan middleware
 app.use(express.json());
-app.use("/users", usersRoutes);
+app.use(morgan("dev"));
+
+// Import main routes
+const mainRoutes = require("./routes/index");
+
+app.use("/api/v1", mainRoutes);
 
 // Definisi Port dan menjalankan server
 const PORT = process.env.SERVER_PORT;
