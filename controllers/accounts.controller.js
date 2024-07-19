@@ -1,4 +1,6 @@
 const pool = require("../db/index");
+const bcrypt = require("bcrypt");
+const { v4: uuidv4 } = require("uuid");
 
 class AccountsController {
   async getAllAccounts(req, res) {
@@ -28,6 +30,45 @@ class AccountsController {
         .json({ message: "Account found", account: result.rows[0] });
     } catch (error) {
       res.status(404).json({ message: error.message });
+    }
+  }
+
+  async createAccount(req, res) {
+    try {
+      const { user_id, bank_name, bank_account_number, balance } = req.body;
+
+      // Check user_id from users table
+      const user = await pool.query("SELECT name FROM users WHERE id = $1", [
+        user_id,
+      ]);
+      if (user.rows.length === 0) {
+        return res
+          .status(404)
+          .json({ message: "User not found", user_id: user_id });
+      }
+
+      // Define salt and hash informations
+      const salt = 10;
+      const hashedBankAccountNum = await bcrypt.hash(
+        bank_account_number.toString(),
+        salt
+      );
+
+      // Insert into bank_accounts table
+      const result = await pool.query(
+        `
+        INSERT INTO bank_accounts (id, user_id, bank_name, bank_account_number, balance)
+        VALUES ($1, $2, $3, $4, $5) RETURNING *
+        `,
+        [uuidv4(), user_id, bank_name, hashedBankAccountNum, balance]
+      );
+
+      res.status(201).json({
+        message: "Account created",
+        account: result.rows[0],
+      });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
     }
   }
 

@@ -6,7 +6,6 @@ const { v4: uuidv4 } = require("uuid");
 class UsersController {
   async getAllUsers(req, res) {
     try {
-      // SELECT name, email from users table
       const results = await pool.query("SELECT id, name, email FROM users;");
 
       res.status(200).json({ message: "Success", users: results.rows });

@@ -1,9 +1,10 @@
 const { Router } = require("express");
-const router = Router();
 const UserController = require("../controllers/users.controller");
 const checkIfExistById = require("../middlewares/checkIfExistsById");
-const validateUser = require("../middlewares/validateInputs");
+const { validateUser } = require("../middlewares/validateInputs");
 const checkIfExistsAllRows = require("../middlewares/checkIfExistsAllRows");
+
+const router = Router();
 
 // GET all users
 router.get("/", checkIfExistsAllRows("users"), UserController.getAllUsers);

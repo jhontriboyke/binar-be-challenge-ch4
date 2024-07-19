@@ -1,7 +1,9 @@
 const { Router } = require("express");
-const router = Router();
 const AccountsController = require("../controllers/accounts.controller");
 const checkIfExistsAllRows = require("../middlewares/checkIfExistsAllRows");
+const { validateAccount } = require("../middlewares/validateInputs");
+
+const router = Router();
 
 // GET all accounts
 router.get(
@@ -14,7 +16,7 @@ router.get(
 router.get("/:id", AccountsController.getAccountById);
 
 // POST an account
-router.post("/");
+router.post("/", validateAccount, AccountsController.createAccount);
 
 // PUT an account by id
 router.put("/:id", AccountsController.updateAccountById);
