@@ -1,17 +1,28 @@
 const { Router } = require("express");
 const router = Router();
 const UserController = require("../controllers/users.controller");
+const checkIfExistById = require("../middlewares/checkIfExistsById");
+const validateUser = require("../middlewares/validateInputs");
+const checkIfExistsAllRows = require("../middlewares/checkIfExistsAllRows");
 
 // GET all users
-router.get("/", UserController.getAllUsers);
+router.get("/", checkIfExistsAllRows("users"), UserController.getAllUsers);
 
 // GET user by id
-router.get("/:id", UserController.getUserById);
+router.get("/:id", checkIfExistById("users"), UserController.getUserById);
 
 // POST user
-router.post("/", UserController.createUser);
+router.post("/", validateUser, UserController.createUser);
+
+// PUT user by id
+router.put(
+  "/:id",
+  validateUser,
+  checkIfExistById("users"),
+  UserController.updateUserById
+);
 
 // DELETE user
-router.delete("/:id", UserController.deleteUserById);
+router.delete("/:id", checkIfExistById("users"), UserController.deleteUserById);
 
 module.exports = router;

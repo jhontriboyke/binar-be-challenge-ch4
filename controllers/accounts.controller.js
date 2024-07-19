@@ -85,6 +85,29 @@ class AccountsController {
       res.status(404).json({ message: error.message });
     }
   }
+
+  async deleteAccountById(req, res) {
+    try {
+      const accountID = req.params.id;
+
+      const result = await pool.query(
+        "SELECT * FROM bank_accounts WHERE id = $1",
+        [accountID]
+      );
+
+      if (result.rows.length === 0) {
+        throw new Error("Account not found");
+      }
+
+      await pool.query("DELETE FROM bank_accounts WHERE id = $1", [accountID]);
+
+      res
+        .status(200)
+        .json({ message: "Account deleted", account_id: accountID });
+    } catch (error) {
+      res.status(404).json({ message: error.message });
+    }
+  }
 }
 
 module.exports = new AccountsController();

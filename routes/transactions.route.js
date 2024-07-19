@@ -1,15 +1,11 @@
 const pool = require("../db/index");
 const { Router } = require("express");
+const TransactionsController = require("../controllers/transcations.controller");
 
 const router = Router();
 
-router.get("/", async (req, res) => {
-  try {
-    const results = await pool.query("SELECT * FROM transactions;");
-    res.status(200).json(results.rows);
-  } catch (error) {
-    res.status(404).json({ message: "Something went wrong" });
-  }
-});
+router.get("/", TransactionsController.getAllTransactions);
+
+router.get("/:id", TransactionsController.getTransactionById);
 
 module.exports = router;
