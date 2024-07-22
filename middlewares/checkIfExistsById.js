@@ -1,4 +1,4 @@
-const pool = require("../db");
+const pool = require("../config/db");
 
 const checkIfExistById = (tableName) => {
   return async (req, res, next) => {
@@ -6,22 +6,17 @@ const checkIfExistById = (tableName) => {
 
     try {
       const result = await pool.query(
-        `SELECT * FROM ${tableName} WHERE id = $1`,
+        `SELECT 1 FROM ${tableName} WHERE id = $1`,
         [id]
       );
 
       if (result.rows.length === 0) {
-        return res.status(404).json({
-          message: `${tableName.slice(0, -1)} not found`,
-          [`${tableName.slice(0, -1)}`]: {
-            id: id,
-          },
-        });
+        throw new Error("User not found");
       }
 
       next();
     } catch (error) {
-      res.status(500).json({ message: error.message });
+      res.fail(404, { [`${tableName.slice(0, -1)}`]: { id } }, error.message);
     }
   };
 };

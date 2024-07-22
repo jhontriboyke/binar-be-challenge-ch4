@@ -1,7 +1,7 @@
 const { Router } = require("express");
-const AccountsController = require("../controllers/accounts.controller");
-const checkIfExistsAllRows = require("../middlewares/checkIfExistsAllRows");
-const { validateAccount } = require("../middlewares/validateInputs");
+const { AccountsController } = require("../../../controllers/").V1_CONTROLLER;
+const checkIfExistsAllRows = require("../../../middlewares/checkIfExistsAllRows");
+const { validateAccount } = require("../../../middlewares/validateInputs");
 
 const router = Router();
 

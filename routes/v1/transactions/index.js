@@ -1,6 +1,6 @@
-const pool = require("../db/index");
 const { Router } = require("express");
-const TransactionsController = require("../controllers/transcations.controller");
+const { TransactionsController } =
+  require("../../../controllers/").V1_CONTROLLER;
 
 const router = Router();
 
