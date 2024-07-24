@@ -3,10 +3,10 @@ const express = require("express");
 const morgan = require("morgan");
 
 // Middleware import
-const responseFormat = require("./middlewares/responseFormat");
+const responseFormat = require("./src/middlewares/responseFormat");
 
 // Route import
-const API_ROUTES = require("./routes");
+const API_ROUTES = require("./src/routes");
 
 // Define express app
 const app = express();

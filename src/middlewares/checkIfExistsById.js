@@ -1,4 +1,4 @@
-const pool = require("../config/db");
+const pool = require("../../config/db");
 
 const checkIfExistById = (tableName) => {
   return async (req, res, next) => {

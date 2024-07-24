@@ -1,11 +1,10 @@
 const express = require("express");
 const router = express.Router();
 
-//
-
 // Import routes
-const V1_ROUTES = require("./v1/");
+const USERS_ROUTES = require("./users.route");
 
-router.use("/v1", V1_ROUTES);
+// Define route
+router.use("/users", USERS_ROUTES);
 
 module.exports = router;
