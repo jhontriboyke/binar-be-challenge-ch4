@@ -1,6 +1,5 @@
 const { Router } = require("express");
-const { TransactionsController } =
-  require("../../../controllers/").V1_CONTROLLER;
+const { TransactionsController } = require("../../controllers").V1_CONTROLLER;
 
 const router = Router();
 

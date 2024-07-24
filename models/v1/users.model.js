@@ -1,4 +1,4 @@
-const pool = require("../../../config/db");
+const pool = require("../../config/db");
 
 class UserModel {
   async getAllUser() {
@@ -110,12 +110,12 @@ class UserModel {
 
   async deleteUserById(userId) {
     const value = [userId];
-    const query = (tableName) => {
-      return `DELETE FROM ${tableName} WHERE user_id = $1`;
+    const query = (tableName, id) => {
+      return `DELETE FROM ${tableName} WHERE ${id} = $1`;
     };
 
-    const profile = await pool.query(query("profiles"), value);
-    const user = await pool.query(query("users"), value);
+    const profile = await pool.query(query("profiles", "user_id"), value);
+    const user = await pool.query(query("users", "id"), value);
 
     return { profile, user };
   }

@@ -1,9 +1,9 @@
 const { Router } = require("express");
-const checkIfExistById = require("../../../middlewares/checkIfExistsById");
-const { validateUser } = require("../../../middlewares/validateInputs");
-const checkIfExistsAllRows = require("../../../middlewares/checkIfExistsAllRows");
+const checkIfExistById = require("../../middlewares/checkIfExistsById");
+const { validateUser } = require("../../middlewares/validateInputs");
+const checkIfExistsAllRows = require("../../middlewares/checkIfExistsAllRows");
 
-const { UserController } = require("../../../controllers/").V1_CONTROLLER;
+const { UserController } = require("../../controllers").V1_CONTROLLER;
 
 const router = Router();
 

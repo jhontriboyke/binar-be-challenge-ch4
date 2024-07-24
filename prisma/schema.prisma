@@ -1,0 +1,94 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String     @id @default(uuid())
+  first_name String
+  last_name  String
+  email      String
+  password   String
+  profile    Profile? // Opsional with Profile model
+  account    Accounts[]
+}
+
+model Profile {
+  id              String        @id @default(uuid())
+  identity_type   Identity_Type
+  identity_number String        @db.VarChar(16)
+  phone_number    String        @db.VarChar(16)
+  nationality     String
+  job             String
+  user_id         String        @unique
+  user            User          @relation(fields: [user_id], references: [id])
+  address         Address?
+}
+
+enum Identity_Type {
+  KTP
+  KK
+  Passport
+}
+
+model Address {
+  id          String  @id @default(uuid())
+  street      String
+  village     String?
+  postal_code String
+  city        String
+  province    String
+  country     String
+  profile_id  String  @unique
+  profile     Profile @relation(fields: [profile_id], references: [id])
+}
+
+model Account_Types {
+  id          Int        @id @unique @default(autoincrement())
+  name        String     @unique
+  description String?
+  account     Accounts[]
+}
+
+model Accounts {
+  id               String         @id @default(uuid())
+  number           String         @unique @db.VarChar(12)
+  pin_number       String         @db.VarChar(6)
+  balance          Float
+  bank_name        String
+  user_id          String
+  user             User           @relation(fields: [user_id], references: [id])
+  account_type_id  Int
+  account_type     Account_Types  @relation(fields: [account_type_id], references: [id])
+  transaction_from Transactions[] @relation("FromAccount")
+  transaction_to   Transactions[] @relation("ToAccount")
+}
+
+model Transaction_Types {
+  id          Int            @id @default(autoincrement())
+  name        String
+  description String?
+  transaction Transactions[]
+}
+
+model Transactions {
+  id                  String            @id @default(uuid())
+  amount              Float
+  date                DateTime          @default(now())
+  from_account_id     String
+  to_account_id       String
+  from_account        Accounts          @relation("FromAccount", fields: [from_account_id], references: [id])
+  to_account          Accounts          @relation("ToAccount", fields: [to_account_id], references: [id])
+  transaction_type_id Int
+  transaction_type    Transaction_Types @relation(fields: [transaction_type_id], references: [id])
+}

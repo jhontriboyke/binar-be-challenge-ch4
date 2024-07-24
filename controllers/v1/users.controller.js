@@ -1,7 +1,7 @@
-const pool = require("../../../config/db");
+const pool = require("../../config/db");
 const bcrypt = require("bcrypt");
 const { v4: uuidv4 } = require("uuid");
-const { UserModel } = require("../../../models/").V1_MODELS;
+const { UserModel } = require("../../models").V1_MODELS;
 
 class UsersController {
   async getAllUsers(req, res) {
@@ -17,7 +17,7 @@ class UsersController {
     try {
       const userID = req.params.id;
       const user = await UserModel.getUserById(userID);
-      res.success({ user: user }, "User found");
+      res.success(200, { user: user }, "User found");
     } catch (error) {
       res.error(500, error.message, "Server Internal Error");
     }
