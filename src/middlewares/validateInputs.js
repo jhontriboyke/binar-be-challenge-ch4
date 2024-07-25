@@ -36,12 +36,21 @@ const validateUser = [
   },
 ];
 
-const validateAddress = [
-  check("street").notEmpty().withMessage("Street name is required"),
-  check("postalCode").notEmpty().withMessage("Postal code number is required"),
-  check("city").notEmpty().withMessage("City name is required"),
-  check("province").notEmpty().withMessage("Province name is required"),
-  check("country").notEmpty().withMessage("Country name is required"),
+const validateAccount = [
+  check("user_id").isUUID().withMessage("Please provide a valid user_id"),
+  check("account_type_id")
+    .isIn([1, 2, 3])
+    .withMessage(
+      "Please choose a number for your Account Type (1: Basic, 2: Premium, 3: Deluxe)"
+    ),
+  check("bank_name").notEmpty().withMessage("Bank Name is required"),
+  check("number")
+    .isLength({ min: 12, max: 12 })
+    .withMessage("Bank Account Number should be exact 12 digits"),
+  check("pin_number")
+    .isLength({ min: 6, max: 6 })
+    .withMessage("Pin Number should be exact 6 digits"),
+  check("balance").isFloat({ gt: 0 }).withMessage("Balance should more than 0"),
   (req, res, next) => {
     const results = validationResult(req);
 
@@ -53,13 +62,18 @@ const validateAddress = [
   },
 ];
 
-const validateAccount = [
-  check("user_id").isUUID().withMessage("Please provide a valid user_id"),
-  check("bank_name").notEmpty().withMessage("Bank Name should not empty"),
-  check("bank_account_number")
+const validateUpdateAccount = [
+  check("account_type_id")
+    .isIn([1, 2, 3])
+    .withMessage(
+      "Please choose a number for your Account Type (1: Basic, 2: Premium, 3: Deluxe)"
+    ),
+  check("number")
     .isLength({ min: 12, max: 12 })
-    .withMessage("Bank Account Number should be 12 digits"),
-  check("balance").isFloat({ gt: 0 }).withMessage("Balance should more than 0"),
+    .withMessage("Bank Account Number should be exact 12 digits"),
+  check("pin_number")
+    .isLength({ min: 6, max: 6 })
+    .withMessage("Pin Number should be exact 6 digits"),
   (req, res, next) => {
     const results = validationResult(req);
 
@@ -73,4 +87,6 @@ const validateAccount = [
 
 module.exports = {
   validateUser,
+  validateAccount,
+  validateUpdateAccount,
 };

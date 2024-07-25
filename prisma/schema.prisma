@@ -26,12 +26,12 @@ model User {
 model Profile {
   id              String        @id @default(uuid())
   identity_type   Identity_Type
-  identity_number String        @db.VarChar(16)
+  identity_number String        @unique @db.VarChar(16)
   phone_number    String        @db.VarChar(16)
   nationality     String
   job             String
   user_id         String        @unique
-  user            User          @relation(fields: [user_id], references: [id])
+  user            User          @relation(fields: [user_id], references: [id], onDelete: Cascade)
   address         Address?
 }
 
@@ -50,7 +50,7 @@ model Address {
   province    String
   country     String
   profile_id  String  @unique
-  profile     Profile @relation(fields: [profile_id], references: [id])
+  profile     Profile @relation(fields: [profile_id], references: [id], onDelete: Cascade)
 }
 
 model Account_Types {
