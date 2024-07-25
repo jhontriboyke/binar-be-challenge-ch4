@@ -1,3 +1,7 @@
+-- OLD VERSION
+-- FROM Binar Challenge Chapter 3
+-- New updated version for Challenge Chapter 4 in schema.prisma
+
 CREATE DATABASE db_bank;
 
 CREATE TABLE users (

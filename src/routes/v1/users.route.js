@@ -1,7 +1,8 @@
 const { Router } = require("express");
-const checkIfExistById = require("../../middlewares/checkIfExistsById");
-const { validateUser } = require("../../middlewares/validateInputs");
-const checkIfExistsAllRows = require("../../middlewares/checkIfExistsAllRows");
+const {
+  validateUser,
+  validateProfileAndAddress,
+} = require("../../middlewares/validateInputs");
 
 const { UserController } = require("../../controllers").V1_CONTROLLER;
 
@@ -14,12 +15,22 @@ router.get("/", UserController.getAllUsers);
 router.get("/:id", UserController.getUserById);
 
 // POST an user
-router.post("/", validateUser, UserController.createUser);
+router.post(
+  "/",
+  validateUser,
+  validateProfileAndAddress,
+  UserController.createUser
+);
 
-// PUT
-router.put("/:id", validateUser, UserController.updateUserById);
+// PUT an user by id
+router.put(
+  "/:id",
+  validateUser,
+  validateProfileAndAddress,
+  UserController.updateUserById
+);
 
-// DELETE
+// DELETE an user by id
 router.delete("/:id", UserController.deleteUserById);
 
 module.exports = router;

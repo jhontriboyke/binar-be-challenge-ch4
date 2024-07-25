@@ -1,6 +1,24 @@
 const prisma = require("../../../config/prisma");
 
 class AccountsModel {
+  static async findAccountById(account_id) {
+    try {
+      const result = await prisma.accounts.findUnique({
+        where: {
+          id: account_id,
+        },
+      });
+
+      if (result) {
+        return result;
+      } else {
+        throw new Error("Account not found");
+      }
+    } catch (error) {
+      return error;
+    }
+  }
+
   async getAllAccounts() {
     try {
       const results = await prisma.accounts.findMany();
@@ -64,6 +82,19 @@ class AccountsModel {
           number: number,
           pin_number: pin_number,
           account_type_id: account_type_id,
+        },
+      });
+      return result;
+    } catch (error) {
+      return { error: error.message };
+    }
+  }
+
+  async deleteAccountById(account_id) {
+    try {
+      const result = await prisma.accounts.delete({
+        where: {
+          id: account_id,
         },
       });
       return result;

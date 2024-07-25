@@ -1,3 +1,5 @@
+// NOT USE AGAIN
+
 const pool = require("../../config/db");
 
 const checkIfExistById = (tableName) => {

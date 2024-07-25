@@ -1,5 +1,4 @@
-const { UserModel } = require("../../models/v1");
-const AccountsModel = require("../../models/v1/accounts.model");
+const { AccountsModel } = require("../../models/v1");
 
 class AccountController {
   async getAllAccounts(req, res) {

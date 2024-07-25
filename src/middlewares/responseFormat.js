@@ -26,6 +26,14 @@ const responseFormat = (req, res, next) => {
     });
   };
 
+  res.notFound = (message, data = null) => {
+    res.status(404).json({
+      status: "fail",
+      message: message,
+      data: data,
+    });
+  };
+
   next();
 };
 

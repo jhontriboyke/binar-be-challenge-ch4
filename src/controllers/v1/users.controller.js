@@ -23,7 +23,7 @@ class UsersController {
       const user = await UserModel.getUserById(user_id);
 
       if (user instanceof Error) {
-        return res.fail(404, {}, user.message);
+        return res.fail(404, { user_id: user_id }, user.message);
       }
 
       res.success(200, { user: user }, "Data retrieved successfully");
@@ -115,42 +115,68 @@ class UsersController {
       const salt = 10;
       const hashed_password = await bcrypt.hash(password, salt);
 
-      const user = await UserModel.updateUserById(
-        user_id,
+      const user_obj = {
         first_name,
         last_name,
         email,
-        hashed_password
-      );
+        password: hashed_password,
+      };
 
-      if (user.error) {
-        return res.fail(404, { user_id: user_id }, user.error);
-      }
-
-      const profile = await UserModel.updateProfileByUserId(
-        user_id,
+      const profile_obj = {
         identity_type,
         identity_number,
         phone_number,
         nationality,
-        job
-      );
+        job,
+      };
 
-      const address = await UserModel.updateAddressByProfileId(
-        profile.id,
+      const address_obj = {
         street,
         village,
         postal_code,
         city,
         province,
-        country
+        country,
+      };
+
+      const result = await UserModel.updateUser(
+        user_id,
+        user_obj,
+        profile_obj,
+        address_obj
       );
 
-      res.success(
-        200,
-        { user: user, profile: profile, address: address },
-        "User updated"
-      );
+      // const user = await UserModel.updateUserById(
+      //   first_name,
+      //   last_name,
+      //   email,
+      //   hashed_password
+      // );
+
+      // if (user instanceof Error) {
+      //   return res.fail(404, { user_id: user_id }, user.message);
+      // }
+
+      // const profile = await UserModel.updateProfileByUserId(
+      //   user_id,
+      //   identity_type,
+      //   identity_number,
+      //   phone_number,
+      //   nationality,
+      //   job
+      // );
+
+      // const address = await UserModel.updateAddressByProfileId(
+      //   profile.id,
+      //   street,
+      //   village,
+      //   postal_code,
+      //   city,
+      //   province,
+      //   country
+      // );
+
+      res.success(200, result, "User updated");
     } catch (error) {
       res.error(500, error.message, "Server Internal Error");
     }
@@ -162,7 +188,7 @@ class UsersController {
       const user = await UserModel.deleteUser(user_id);
 
       if (user.error) {
-        return res.fail(404, {}, user.error);
+        return res.fail(404, { user_id: user_id }, user.error);
       }
 
       res.success(200, { user_id: user_id }, "User deleted");

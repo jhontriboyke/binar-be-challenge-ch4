@@ -7,6 +7,18 @@ const validateUser = [
   check("password")
     .isLength({ min: 6 })
     .withMessage("Password must be 6 or more characters"),
+  (req, res, next) => {
+    const results = validationResult(req);
+
+    if (results.isEmpty()) {
+      return next();
+    }
+
+    res.status(400).json({ errors: results.array() });
+  },
+];
+
+const validateProfileAndAddress = [
   check("identity_type")
     .isIn(["KTP", "KK", "Passport"])
     .withMessage("Please provide valid identity type (KTP, KK, or Passport)"),
@@ -85,8 +97,36 @@ const validateUpdateAccount = [
   },
 ];
 
+const validateTransaction = [
+  check("from_account_number")
+    .isLength({ min: 12, max: 12 })
+    .withMessage("Bank Account Number should be exactly 12 digits"),
+  check("to_account_number")
+    .isLength({ min: 12, max: 12 })
+    .withMessage("Bank Account Number should be exactly 12 digits"),
+  check("amount")
+    .isFloat({ gt: 0 })
+    .withMessage("Amount should be more than 0"),
+  check("transaction_type_id")
+    .isInt({ min: 1, max: 3 })
+    .withMessage(
+      "Please choose a number between 1 and 3: 1 = Deposit, 2 = Withdrawal, 3 = Transfer"
+    ),
+  (req, res, next) => {
+    const results = validationResult(req);
+
+    if (results.isEmpty()) {
+      return next();
+    }
+
+    res.status(400).json({ errors: results.array() });
+  },
+];
+
 module.exports = {
   validateUser,
+  validateProfileAndAddress,
   validateAccount,
   validateUpdateAccount,
+  validateTransaction,
 };

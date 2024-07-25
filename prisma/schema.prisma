@@ -31,7 +31,7 @@ model Profile {
   nationality     String
   job             String
   user_id         String        @unique
-  user            User          @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user            User          @relation(fields: [user_id], references: [id])
   address         Address?
 }
 
@@ -50,7 +50,7 @@ model Address {
   province    String
   country     String
   profile_id  String  @unique
-  profile     Profile @relation(fields: [profile_id], references: [id], onDelete: Cascade)
+  profile     Profile @relation(fields: [profile_id], references: [id])
 }
 
 model Account_Types {
