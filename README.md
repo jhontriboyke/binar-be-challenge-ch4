@@ -1,4 +1,4 @@
-# Binar Bank System REST API Documentation
+# ![Binar](./public/logo_binar.png) Binar Bootcamp Challenge - Bank System REST API Documentation
 
 ## Introduction
 
