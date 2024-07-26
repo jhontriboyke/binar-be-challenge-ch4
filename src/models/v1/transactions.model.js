@@ -1,31 +1,122 @@
 const prisma = require("../../../config/prisma");
 
 class TransactionsModel {
-  async checkIfAccountExistById(id) {
-    const account = await prisma.accounts.findUnique({
-      where: {
-        id: id,
-      },
-    });
+  async getAllTransactions(queries) {
+    try {
+      const results = await prisma.transaction.findMany({
+        where: queries,
+      });
 
-    if (!account) {
-      throw new Error("Account not found");
+      return results;
+    } catch (error) {
+      return { error: error.message };
     }
+  }
 
-    return account;
+  async findAccountAndUserData(account_number) {
+    try {
+      let account = await prisma.accounts.findUnique({
+        where: {
+          number: account_number,
+        },
+        select: {
+          id: true,
+          number: true,
+          user_id: true,
+        },
+      });
+
+      let user = await prisma.user.findUnique({
+        where: {
+          id: account.user_id,
+        },
+        select: {
+          first_name: true,
+          last_name: true,
+        },
+      });
+
+      delete account.user_id;
+
+      return {
+        account,
+        user,
+      };
+    } catch (error) {
+      return error;
+    }
   }
 
   async getTransactionById(transaction_id) {
     try {
-      const result = await prisma.transactions.findUnique({
+      const transaction = await prisma.transaction.findUnique({
         where: {
           id: transaction_id,
         },
       });
 
-      if (!result) {
-        throw new Error("Transaction not found");
+      const { account: from_account, user: from_user } =
+        await this.findAccountAndUserData(transaction.from_account_number);
+
+      const { account: to_account, user: to_user } =
+        await this.findAccountAndUserData(transaction.to_account_number);
+
+      return {
+        id: transaction.id,
+        type: transaction.type,
+        amount: transaction.amount,
+        date: transaction.date,
+        from_account: {
+          ...from_account,
+          user: {
+            ...from_user,
+          },
+        },
+        to_account: {
+          ...to_account,
+          user: {
+            ...to_user,
+          },
+        },
+      };
+    } catch (error) {
+      return { error: error.message };
+    }
+  }
+
+  async createDeposit(to_account_number, amount) {
+    try {
+      const to_account = await prisma.accounts.findUnique({
+        where: {
+          number: to_account_number,
+        },
+      });
+
+      if (!to_account) {
+        throw new Error("Account not found");
       }
+
+      const result = await prisma.$transaction(async (prisma) => {
+        await prisma.accounts.update({
+          where: {
+            number: to_account_number,
+          },
+          data: {
+            balance: to_account.balance + amount,
+          },
+        });
+
+        const transaction = await prisma.transaction.create({
+          data: {
+            from_account_number: null,
+            to_account_number: to_account_number,
+            amount: amount,
+            type: "deposit",
+          },
+        });
+
+        return transaction;
+      });
 
       return result;
     } catch (error) {
@@ -33,19 +124,65 @@ class TransactionsModel {
     }
   }
 
-  async createTransaction(from_account_number, to_account_number, amount) {
+  async createWithdraw(from_account_number, amount) {
+    try {
+      const from_account = await prisma.accounts.findUnique({
+        where: {
+          number: from_account_number,
+        },
+      });
+
+      if (!from_account) {
+        throw new Error("Account not found");
+      }
+
+      const result = await prisma.$transaction(async (prisma) => {
+        await prisma.accounts.update({
+          where: {
+            number: from_account_number,
+          },
+          data: {
+            balance: from_account.balance - amount,
+          },
+        });
+
+        const transaction = await prisma.transaction.create({
+          data: {
+            from_account_number: from_account_number,
+            to_account_number: null,
+            amount: amount,
+            type: "withdraw",
+          },
+        });
+
+        return transaction;
+      });
+
+      return result;
+    } catch (error) {
+      return { error: error.message };
+    }
+  }
+
+  async createTransfer(from_account_number, to_account_number, amount) {
     try {
       // Check from_account_number exist
-      const from_account = await this.checkIfAccountExistById(
-        from_account_number
-      );
+      const from_account = await prisma.accounts.findUnique({
+        where: {
+          number: from_account_number,
+        },
+      });
 
       if (!from_account) {
         throw new Error("From account not found");
       }
 
       // Check to_account_number exist
-      const to_account = await this.checkIfAccountExistById(to_account_number);
+      const to_account = await prisma.accounts.findUnique({
+        where: {
+          number: to_account_number,
+        },
+      });
 
       if (!to_account) {
         throw new Error("To account not found");
@@ -78,11 +215,12 @@ class TransactionsModel {
         });
 
         // Add to transactions table
-        const transaction = await prisma.transfer.create({
+        const transaction = await prisma.transaction.create({
           data: {
             amount,
-            from_account_id: from_account_updated.id,
-            to_account_id: to_account_updated.id,
+            from_account_number: from_account_updated.number,
+            to_account_number: to_account_updated.number,
+            type: "transfer",
           },
         });
 

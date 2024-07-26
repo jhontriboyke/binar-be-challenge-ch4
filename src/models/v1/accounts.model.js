@@ -3,7 +3,15 @@ const prisma = require("../../../config/prisma");
 class AccountsModel {
   async getAllAccounts() {
     try {
-      const results = await prisma.accounts.findMany();
+      const results = await prisma.accounts.findMany({
+        select: {
+          id: true,
+          number: true,
+          balance: true,
+          bank_name: true,
+          account_type: true,
+        },
+      });
 
       return results;
     } catch (error) {

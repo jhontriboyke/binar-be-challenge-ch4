@@ -97,7 +97,7 @@ const validateUpdateAccount = [
   },
 ];
 
-const validateTransaction = [
+const validateTransferTransaction = [
   check("from_account_number")
     .isLength({ min: 12, max: 12 })
     .withMessage("Bank Account Number should be exactly 12 digits"),
@@ -107,11 +107,42 @@ const validateTransaction = [
   check("amount")
     .isFloat({ gt: 0 })
     .withMessage("Amount should be more than 0"),
-  check("transaction_type_id")
-    .isInt({ min: 1, max: 3 })
-    .withMessage(
-      "Please choose a number between 1 and 3: 1 = Deposit, 2 = Withdrawal, 3 = Transfer"
-    ),
+  (req, res, next) => {
+    const results = validationResult(req);
+
+    if (results.isEmpty()) {
+      return next();
+    }
+
+    res.status(400).json({ errors: results.array() });
+  },
+];
+
+const validateDepositTransaction = [
+  check("to_account_number")
+    .isLength({ min: 12, max: 12 })
+    .withMessage("Bank Account Number should be exactly 12 digits"),
+  check("amount")
+    .isFloat({ gt: 0 })
+    .withMessage("Amount should be more than 0"),
+  (req, res, next) => {
+    const results = validationResult(req);
+
+    if (results.isEmpty()) {
+      return next();
+    }
+
+    res.status(400).json({ errors: results.array() });
+  },
+];
+
+const validateWithdrawTransaction = [
+  check("from_account_number")
+    .isLength({ min: 12, max: 12 })
+    .withMessage("Bank Account Number should be exactly 12 digits"),
+  check("amount")
+    .isFloat({ gt: 0 })
+    .withMessage("Amount should be more than 0"),
   (req, res, next) => {
     const results = validationResult(req);
 
@@ -128,5 +159,7 @@ module.exports = {
   validateProfileAndAddress,
   validateAccount,
   validateUpdateAccount,
-  validateTransaction,
+  validateTransferTransaction,
+  validateDepositTransaction,
+  validateWithdrawTransaction,
 };

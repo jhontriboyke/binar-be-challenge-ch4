@@ -8,18 +8,23 @@ const account_types = [
   { name: "Deluxe", description: "The best among the bests" },
 ];
 
-const transaction_types = [
-  { name: "Deposit" },
-  { name: "Withdrawal" },
-  { name: "Transfer" },
-];
-
 async function init() {
-  for (const type of transaction_types) {
-    await prisma.transaction_Types.create({
-      data: type,
-    });
-  }
+  const init_account_types = async () => {
+    try {
+      for (const type of account_types) {
+        await prisma.account_Types.create({
+          data: type,
+        });
+      }
+      console.log("Account types initialized successfully.");
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  // Call the init_account_types function with await
+  await init_account_types();
 }
 
+// Run the init function
 init();

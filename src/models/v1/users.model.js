@@ -9,7 +9,22 @@ class UserModel {
       const result = await prisma.user.findMany({
         select: {
           id: true,
+          first_name: true,
+          last_name: true,
           email: true,
+        },
+      });
+      return result;
+    } catch (error) {
+      return error;
+    }
+  }
+
+  async getUserBasicById(user_id) {
+    try {
+      const result = await prisma.user.findUnique({
+        where: {
+          id: user_id,
         },
       });
       return result;
@@ -29,27 +44,8 @@ class UserModel {
           first_name: true,
           last_name: true,
           email: true,
-          profile: {
-            select: {
-              id: true,
-              identity_type: true,
-              identity_number: true,
-              phone_number: true,
-              job: true,
-              nationality: true,
-              address: {
-                select: {
-                  id: true,
-                  street: true,
-                  village: true,
-                  postal_code: true,
-                  city: true,
-                  province: true,
-                  country: true,
-                },
-              },
-            },
-          },
+          profile: true,
+          address: true,
         },
       });
 
@@ -79,7 +75,7 @@ class UserModel {
 
         const address = await prisma.address.create({
           data: {
-            profile_id: profile.id,
+            user_id: user.id,
             ...address_obj,
           },
         });
@@ -94,77 +90,6 @@ class UserModel {
       return result;
     } catch (error) {
       return { error: error.message };
-    }
-  }
-
-  async createUser(first_name, last_name, email, password) {
-    try {
-      const user = await prisma.user.create({
-        data: {
-          first_name: first_name,
-          last_name: last_name,
-          email: email,
-          password: password,
-        },
-      });
-
-      return user;
-    } catch (error) {
-      return error;
-    }
-  }
-
-  async createProfile(
-    user_id,
-    identity_type,
-    identity_number,
-    phone_number,
-    nationality,
-    job
-  ) {
-    try {
-      const profile = await prisma.profile.create({
-        data: {
-          user_id: user_id,
-          identity_type: identity_type,
-          identity_number: identity_number,
-          phone_number: phone_number,
-          nationality: nationality,
-          job: job,
-        },
-      });
-
-      return profile;
-    } catch (error) {
-      return error;
-    }
-  }
-
-  async createAddress(
-    profile_id,
-    street,
-    village,
-    postal_code,
-    city,
-    province,
-    country
-  ) {
-    try {
-      const address = await prisma.address.create({
-        data: {
-          profile_id: profile_id,
-          street: street,
-          village: village,
-          postal_code: postal_code,
-          city: city,
-          province: province,
-          country: country,
-        },
-      });
-
-      return address;
-    } catch (error) {
-      return error;
     }
   }
 
@@ -200,7 +125,7 @@ class UserModel {
 
           updated_address = await prisma.address.update({
             where: {
-              profile_id: updated_profile.id,
+              user_id: user_id,
             },
             data: address_obj,
           });
@@ -224,11 +149,9 @@ class UserModel {
           });
         }
 
-        return {
-          user: updated_user,
-          profile: updated_profile,
-          address: updated_address,
-        };
+        const result = await this.getUserById(user_id);
+
+        return result;
       });
 
       return result;

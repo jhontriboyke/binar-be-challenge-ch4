@@ -75,12 +75,12 @@ model Accounts {
 }
 
 model Transaction {
-  id             String    @id @default(uuid())
-  amount         Float
-  date           DateTime  @default(now())
-  source_id      String?
-  destination_id String?
-  type           String
-  from_account   Accounts? @relation("FromAccount", fields: [source_id], references: [id])
-  to_account     Accounts? @relation("ToAccount", fields: [destination_id], references: [id])
+  id                  String    @id @default(uuid())
+  amount              Float
+  date                DateTime  @default(now())
+  from_account_number String?
+  to_account_number   String?
+  type                String
+  from_account        Accounts? @relation("FromAccount", fields: [from_account_number], references: [number])
+  to_account          Accounts? @relation("ToAccount", fields: [to_account_number], references: [number])
 }
