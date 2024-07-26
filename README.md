@@ -126,7 +126,7 @@ null
                 "last_name": "string",
                 "email": "string"
             },
-            ...
+            {}
         ]
     }
   }
@@ -359,7 +359,7 @@ null
                     "description": "string"
                 }
             },
-            ...
+            {}
         ]
     }
 }
@@ -383,24 +383,24 @@ id: "uuid"
 
 ```json
 {
-    "status": "success",
-    "message": "Account found",
-    "data": {
-        "account": {
-            "id": "string",
-            "bank_name": "string",
-            "number": "string",
-            "pin_number": "string",
-            "balance": "float" / "integer",
-            "account_type_id": "integer",
-            "user": {
-                "id": "string",
-                "first_name": "string",
-                "last_name": "string",
-                "email": "string"
-            }
-        }
+  "status": "success",
+  "message": "Account found",
+  "data": {
+    "account": {
+      "id": "string",
+      "bank_name": "string",
+      "number": "string",
+      "pin_number": "string",
+      "balance": "float",
+      "account_type_id": "integer",
+      "user": {
+        "id": "string",
+        "first_name": "string",
+        "last_name": "string",
+        "email": "string"
+      }
     }
+  }
 }
 ```
 
@@ -427,18 +427,18 @@ id: "uuid"
 
 ```json
 {
-    "status": "success",
-    "message": "Transaction success and created",
-    "data": {
-        "transaction": {
-            "id": "string",
-            "amount": "float" / "integer",
-            "date": "timestamp",
-            "from_account_number": null,
-            "to_account_number": "string",
-            "type": "deposit"
-        }
+  "status": "success",
+  "message": "Transaction success and created",
+  "data": {
+    "transaction": {
+      "id": "string",
+      "amount": "float",
+      "date": "timestamp",
+      "from_account_number": null,
+      "to_account_number": "string",
+      "type": "deposit"
     }
+  }
 }
 ```
 
@@ -454,8 +454,8 @@ id: "uuid"
 
 ```json
 {
-    "from_account_number": "string",
-    "amount": "float" / "integer"
+  "from_account_number": "string",
+  "amount": "float"
 }
 ```
 
@@ -463,18 +463,18 @@ id: "uuid"
 
 ```json
 {
-    "status": "success",
-    "message": "Transaction success and created",
-    "data": {
-        "transaction": {
-            "id": "string",
-            "amount": "float" / "integer",
-            "date": "timestamp",
-            "from_account_number": "string",
-            "to_account_number": null,
-            "type": "withdraw"
-        }
+  "status": "success",
+  "message": "Transaction success and created",
+  "data": {
+    "transaction": {
+      "id": "string",
+      "amount": "float",
+      "date": "timestamp",
+      "from_account_number": "string",
+      "to_account_number": null,
+      "type": "withdraw"
     }
+  }
 }
 ```
 
@@ -490,9 +490,9 @@ id: "uuid"
 
 ```json
 {
-    "from_account_number": "string",
-    "to_account_number": "string",
-    "amount": "float" / "integer"
+  "from_account_number": "string",
+  "to_account_number": "string",
+  "amount": "float"
 }
 ```
 
@@ -500,18 +500,18 @@ id: "uuid"
 
 ```json
 {
-    "status": "success",
-    "message": "Transaction success and created",
-    "data": {
-        "transaction": {
-            "id": "string",
-            "amount": "float" / "integer",
-            "date": "timestamp",
-            "from_account_number": "string",
-            "to_account_number": "string",
-            "type": "transfer"
-        }
+  "status": "success",
+  "message": "Transaction success and created",
+  "data": {
+    "transaction": {
+      "id": "string",
+      "amount": "float",
+      "date": "timestamp",
+      "from_account_number": "string",
+      "to_account_number": "string",
+      "type": "transfer"
     }
+  }
 }
 ```
 
@@ -558,9 +558,122 @@ http://localhost:PORT/api/v1/transactions?type=deposit
                 "last_name": "string",
                 "email": "string"
             },
-            ...
+            {}
         ]
     }
   }
 }
 ```
+
+### **5. Get A Transaction By Id**
+
+<a>http://localhost:PORT/api/v1/transactions/:id</a>
+
+> **Endpoint:** `/transactions/:id`\
+> **Method:** `GET`\
+> **Description:** Get transaction by id
+
+**Request Body**
+
+```json
+null
+```
+
+**Request Parameter**
+
+```
+id: "uuid"
+```
+
+**Response Body**
+
+Transfer
+
+```json
+{
+  "status": "success",
+  "message": "Transaction found",
+  "data": {
+    "transaction": {
+      "id": "string",
+      "type": "string",
+      "amount": "float",
+      "date": "timestamp",
+      "from_account": {
+        "id": "string",
+        "number": "string",
+        "user": {
+          "first_name": "string",
+          "last_name": "string"
+        }
+      },
+      "to_account": {
+        "id": "string",
+        "number": "string",
+        "user": {
+          "first_name": "string",
+          "last_name": "string"
+        }
+      }
+    }
+  }
+}
+```
+
+Deposit
+
+```json
+{
+  "status": "success",
+  "message": "Transaction found",
+  "data": {
+    "transaction": {
+      "id": "string",
+      "type": "string",
+      "amount": "float",
+      "date": "timestamp",
+      "from_account": {
+        "user": {}
+      },
+      "to_account": {
+        "id": "string",
+        "number": "string",
+        "user": {
+          "first_name": "string",
+          "last_name": "string"
+        }
+      }
+    }
+  }
+}
+```
+
+Withdraw
+
+```json
+{
+  "status": "success",
+  "message": "Transaction found",
+  "data": {
+    "transaction": {
+      "id": "string",
+      "type": "string",
+      "amount": "float",
+      "date": "timestamp",
+      "from_account": {
+        "id": "string",
+        "number": "string",
+        "user": {
+          "first_name": "string",
+          "last_name": "string"
+        }
+      },
+      "to_account": {
+        "user": {}
+      }
+    }
+  }
+}
+```
+
+## **_There will update soon_**
