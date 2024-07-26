@@ -53,9 +53,47 @@ class UserModel {
         },
       });
 
+      if (!result) {
+        throw new Error("User not found");
+      }
+
       return result;
     } catch (error) {
-      return error;
+      return { error: error.message };
+    }
+  }
+
+  async createUserProfileAddress(user_obj, profile_obj, address_obj) {
+    try {
+      const result = await prisma.$transaction(async (prisma) => {
+        const user = await prisma.user.create({
+          data: user_obj,
+        });
+
+        const profile = await prisma.profile.create({
+          data: {
+            user_id: user.id,
+            ...profile_obj,
+          },
+        });
+
+        const address = await prisma.address.create({
+          data: {
+            profile_id: profile.id,
+            ...address_obj,
+          },
+        });
+
+        return {
+          user: user,
+          profile: profile,
+          address: address,
+        };
+      });
+
+      return result;
+    } catch (error) {
+      return { error: error.message };
     }
   }
 
@@ -195,12 +233,32 @@ class UserModel {
 
       return result;
     } catch (error) {
-      return error.message;
+      return { error: error.message };
     }
   }
 
   async deleteUser(user_id) {
     try {
+      const user = await prisma.user.findUnique({
+        where: {
+          id: user_id,
+        },
+      });
+
+      if (!user) {
+        throw new Error("User not found");
+      }
+
+      const user_accounts = await prisma.accounts.count({
+        where: {
+          user_id: user_id,
+        },
+      });
+
+      if (user_accounts) {
+        throw new Error("You must delete your account(s) first");
+      }
+
       const result = await prisma.user.delete({
         where: {
           id: user_id,
@@ -209,12 +267,6 @@ class UserModel {
 
       return result;
     } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError) {
-        if (error.code === "P2025") {
-          return { error: "User not found" };
-        }
-      }
-
       return { error: error.message };
     }
   }

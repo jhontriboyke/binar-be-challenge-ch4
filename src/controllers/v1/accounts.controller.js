@@ -24,8 +24,8 @@ class AccountController {
       const account_id = req.params.id;
       const account = await AccountsModel.getAccountById(account_id);
 
-      if (account instanceof Error) {
-        return res.fail(404, {}, account.message);
+      if (account.error) {
+        return res.fail(404, { account_id: account_id }, account.error);
       }
 
       res.success(200, { account: account }, "Account found");
@@ -73,6 +73,22 @@ class AccountController {
       );
 
       res.success(200, { account: account }, "Account updated");
+    } catch (error) {
+      res.error(500, error.message, "Server Internal Error");
+    }
+  }
+
+  async deleteAccountById(req, res) {
+    try {
+      const account_id = req.params.id;
+
+      const account = await AccountsModel.deleteAccountById(account_id);
+
+      if (account.error) {
+        return res.fail(404, { account_id: account_id }, account.error);
+      }
+
+      res.success(200, { account: account }, "Account deleted");
     } catch (error) {
       res.error(500, error.message, "Server Internal Error");
     }

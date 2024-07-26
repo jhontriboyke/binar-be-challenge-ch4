@@ -22,8 +22,8 @@ class UsersController {
       const user_id = req.params.id;
       const user = await UserModel.getUserById(user_id);
 
-      if (user instanceof Error) {
-        return res.fail(404, { user_id: user_id }, user.message);
+      if (user.error) {
+        return res.fail(404, { user_id: user_id }, user.error);
       }
 
       res.success(200, { user: user }, "Data retrieved successfully");
@@ -55,37 +55,41 @@ class UsersController {
       const salt = 10;
       const hashed_password = await bcrypt.hash(password, salt);
 
-      const user = await UserModel.createUser(
+      const user_obj = {
         first_name,
         last_name,
         email,
-        hashed_password
-      );
+        password: hashed_password,
+      };
 
-      const profile = await UserModel.createProfile(
-        user.id,
+      const profile_obj = {
         identity_type,
         identity_number,
         phone_number,
         nationality,
-        job
-      );
+        job,
+      };
 
-      const address = await UserModel.createAddress(
-        profile.id,
+      const address_obj = {
         street,
         village,
         postal_code,
         city,
         province,
-        country
+        country,
+      };
+
+      const result = await UserModel.createUserProfileAddress(
+        user_obj,
+        profile_obj,
+        address_obj
       );
 
-      res.success(
-        201,
-        { user: user, profile: profile, address: address },
-        "User created"
-      );
+      if (result.error) {
+        throw new Error(result.error);
+      }
+
+      res.success(201, result, "User created");
     } catch (error) {
       res.error(500, error.message, "Server Internal Error");
     }
@@ -175,6 +179,10 @@ class UsersController {
       //   province,
       //   country
       // );
+
+      if (result.error) {
+        throw new Error(error);
+      }
 
       res.success(200, result, "User updated");
     } catch (error) {

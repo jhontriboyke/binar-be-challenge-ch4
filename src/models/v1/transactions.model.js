@@ -7,7 +7,7 @@ class TransactionsModel {
 
       return results;
     } catch (error) {
-      return { error: error.message };
+      return errror;
     }
   }
 
@@ -18,6 +18,10 @@ class TransactionsModel {
           id: transaction_id,
         },
       });
+
+      if (!result) {
+        throw new Error("Transaction not found");
+      }
 
       return result;
     } catch (error) {
@@ -54,42 +58,43 @@ class TransactionsModel {
         throw new Error("Your balance is insufficient");
       }
 
-      const [from_account_updated, to_account_updated, transaction] =
-        await prisma.$transaction(async () => {
-          // Update from_account balance data (decrease)
-          await prisma.accounts.update({
-            where: {
-              id: from_account.id,
-            },
-            data: {
-              balance: from_account.balance - amount,
-            },
-          });
-
-          // Update to_account balance data (increase)
-          await prisma.accounts.update({
-            where: {
-              id: to_account.id,
-            },
-            data: {
-              balance: to_account.balance + amount,
-            },
-          });
-
-          // Add to transactions table
-          await prisma.transactions.create({
-            data: {
-              amount,
-              from_account_id: from_account.id,
-              to_account_id: to_account.id,
-              transaction_type_id: 3,
-            },
-          });
+      const result = await prisma.$transaction(async () => {
+        // Update from_account balance data (decrease)
+        const from_account_updated = await prisma.accounts.update({
+          where: {
+            id: from_account.id,
+          },
+          data: {
+            balance: from_account.balance - amount,
+          },
         });
 
-      return transaction;
+        // Update to_account balance data (increase)
+        const to_account_updated = await prisma.accounts.update({
+          where: {
+            id: to_account.id,
+          },
+          data: {
+            balance: to_account.balance + amount,
+          },
+        });
+
+        // Add to transactions table
+        const transaction = await prisma.transactions.create({
+          data: {
+            amount,
+            from_account_id: from_account.id,
+            to_account_id: to_account.id,
+            transaction_type_id: 3,
+          },
+        });
+
+        return transaction;
+      });
+
+      return result;
     } catch (error) {
-      return { error: error.message };
+      return error;
     }
   }
 }

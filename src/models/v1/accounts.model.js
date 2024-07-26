@@ -1,31 +1,13 @@
 const prisma = require("../../../config/prisma");
 
 class AccountsModel {
-  static async findAccountById(account_id) {
-    try {
-      const result = await prisma.accounts.findUnique({
-        where: {
-          id: account_id,
-        },
-      });
-
-      if (result) {
-        return result;
-      } else {
-        throw new Error("Account not found");
-      }
-    } catch (error) {
-      return error;
-    }
-  }
-
   async getAllAccounts() {
     try {
       const results = await prisma.accounts.findMany();
 
       return results;
     } catch (error) {
-      return { error: error.message };
+      return error;
     }
   }
 
@@ -35,6 +17,22 @@ class AccountsModel {
         where: {
           id: account_id,
         },
+        select: {
+          id: true,
+          bank_name: true,
+          number: true,
+          pin_number: true,
+          balance: true,
+          account_type_id: true,
+          user: {
+            select: {
+              id: true,
+              first_name: true,
+              last_name: true,
+              email: true,
+            },
+          },
+        },
       });
 
       if (!result) {
@@ -43,7 +41,7 @@ class AccountsModel {
 
       return result;
     } catch (error) {
-      return error;
+      return { error: error.message };
     }
   }
 
@@ -86,17 +84,28 @@ class AccountsModel {
       });
       return result;
     } catch (error) {
-      return { error: error.message };
+      return error;
     }
   }
 
   async deleteAccountById(account_id) {
     try {
+      const account = await prisma.accounts.findUnique({
+        where: {
+          id: account_id,
+        },
+      });
+
+      if (!account) {
+        throw new Error("Account not found");
+      }
+
       const result = await prisma.accounts.delete({
         where: {
           id: account_id,
         },
       });
+
       return result;
     } catch (error) {
       return { error: error.message };

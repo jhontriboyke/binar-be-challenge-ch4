@@ -10,6 +10,8 @@ const router = Router();
 
 router.get("/", TransactionsController.getAllTranscactions);
 
+router.get("/:id", TransactionsController.getTransactionById);
+
 router.post("/", validateTransaction, TransactionsController.createTransaction);
 
 module.exports = router;
