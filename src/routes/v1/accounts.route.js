@@ -19,7 +19,7 @@ router.post("/", validateAccount, AccountController.createUser);
 // PUT an account by id
 router.put("/:id", validateUpdateAccount, AccountController.updateAccountById);
 
-// DELETA an account by id
+// DELET an account by id
 router.delete("/:id", AccountController.deleteAccountById);
 
 module.exports = router;

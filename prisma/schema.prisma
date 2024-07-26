@@ -20,7 +20,14 @@ model User {
   email      String     @unique
   password   String
   profile    Profile? // Opsional with Profile model
+  address    Address? // Opsional with Address model
   account    Accounts[]
+}
+
+enum Identity_Type {
+  KTP
+  KK
+  Passport
 }
 
 model Profile {
@@ -32,13 +39,6 @@ model Profile {
   job             String
   user_id         String        @unique
   user            User          @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  address         Address?
-}
-
-enum Identity_Type {
-  KTP
-  KK
-  Passport
 }
 
 model Address {
@@ -49,8 +49,8 @@ model Address {
   city        String
   province    String
   country     String
-  profile_id  String  @unique
-  profile     Profile @relation(fields: [profile_id], references: [id], onDelete: Cascade)
+  user_id     String  @unique
+  user        User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
 
 model Account_Types {
@@ -61,34 +61,26 @@ model Account_Types {
 }
 
 model Accounts {
-  id               String         @id @default(uuid())
-  number           String         @unique @db.VarChar(12)
-  pin_number       String         @db.VarChar(6)
+  id               String        @id @default(uuid())
+  number           String        @unique @db.VarChar(12)
+  pin_number       String        @db.VarChar(6)
   balance          Float
   bank_name        String
   user_id          String
-  user             User           @relation(fields: [user_id], references: [id])
+  user             User          @relation(fields: [user_id], references: [id])
   account_type_id  Int
-  account_type     Account_Types  @relation(fields: [account_type_id], references: [id])
-  transaction_from Transactions[] @relation("FromAccount")
-  transaction_to   Transactions[] @relation("ToAccount")
+  account_type     Account_Types @relation(fields: [account_type_id], references: [id])
+  transaction_from Transaction[] @relation("FromAccount")
+  transaction_to   Transaction[] @relation("ToAccount")
 }
 
-model Transaction_Types {
-  id          Int            @id @default(autoincrement())
-  name        String
-  description String?
-  transaction Transactions[]
-}
-
-model Transactions {
-  id                  String            @id @default(uuid())
-  amount              Float
-  date                DateTime          @default(now())
-  from_account_id     String
-  to_account_id       String
-  from_account        Accounts          @relation("FromAccount", fields: [from_account_id], references: [id])
-  to_account          Accounts          @relation("ToAccount", fields: [to_account_id], references: [id])
-  transaction_type_id Int
-  transaction_type    Transaction_Types @relation(fields: [transaction_type_id], references: [id])
+model Transaction {
+  id             String    @id @default(uuid())
+  amount         Float
+  date           DateTime  @default(now())
+  source_id      String?
+  destination_id String?
+  type           String
+  from_account   Accounts? @relation("FromAccount", fields: [source_id], references: [id])
+  to_account     Accounts? @relation("ToAccount", fields: [destination_id], references: [id])
 }

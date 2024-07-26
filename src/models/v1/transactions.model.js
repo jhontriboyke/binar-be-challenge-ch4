@@ -1,14 +1,18 @@
 const prisma = require("../../../config/prisma");
 
 class TransactionsModel {
-  async getAllTransactions() {
-    try {
-      const results = await prisma.transactions.findMany();
+  async checkIfAccountExistById(id) {
+    const account = await prisma.accounts.findUnique({
+      where: {
+        id: id,
+      },
+    });
 
-      return results;
-    } catch (error) {
-      return errror;
+    if (!account) {
+      throw new Error("Account not found");
     }
+
+    return account;
   }
 
   async getTransactionById(transaction_id) {
@@ -29,25 +33,19 @@ class TransactionsModel {
     }
   }
 
-  async createTransfer(from_account_number, to_account_number, amount) {
+  async createTransaction(from_account_number, to_account_number, amount) {
     try {
       // Check from_account_number exist
-      const from_account = await prisma.accounts.findUnique({
-        where: {
-          number: from_account_number,
-        },
-      });
+      const from_account = await this.checkIfAccountExistById(
+        from_account_number
+      );
 
       if (!from_account) {
         throw new Error("From account not found");
       }
 
       // Check to_account_number exist
-      const to_account = await prisma.accounts.findUnique({
-        where: {
-          number: to_account_number,
-        },
-      });
+      const to_account = await this.checkIfAccountExistById(to_account_number);
 
       if (!to_account) {
         throw new Error("To account not found");
@@ -80,12 +78,11 @@ class TransactionsModel {
         });
 
         // Add to transactions table
-        const transaction = await prisma.transactions.create({
+        const transaction = await prisma.transfer.create({
           data: {
             amount,
-            from_account_id: from_account.id,
-            to_account_id: to_account.id,
-            transaction_type_id: 3,
+            from_account_id: from_account_updated.id,
+            to_account_id: to_account_updated.id,
           },
         });
 
@@ -94,7 +91,7 @@ class TransactionsModel {
 
       return result;
     } catch (error) {
-      return error;
+      return { error: error.message };
     }
   }
 }

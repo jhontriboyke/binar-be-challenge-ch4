@@ -8,10 +8,17 @@ const { TransactionsController } =
 
 const router = Router();
 
+// GET all transactions
 router.get("/", TransactionsController.getAllTranscactions);
 
+// GET an transaction by id
 router.get("/:id", TransactionsController.getTransactionById);
 
+// POSt an transaction
 router.post("/", validateTransaction, TransactionsController.createTransaction);
+
+// PUT an transaction by id
+
+// DELETE an transaction by id
 
 module.exports = router;
