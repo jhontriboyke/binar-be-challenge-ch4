@@ -44,8 +44,27 @@ class UserModel {
           first_name: true,
           last_name: true,
           email: true,
-          profile: true,
-          address: true,
+          profile: {
+            select: {
+              id: true,
+              identity_number: true,
+              identity_type: true,
+              nationality: true,
+              phone_number: true,
+              job: true,
+            },
+          },
+          address: {
+            select: {
+              id: true,
+              street: true,
+              village: true,
+              postal_code: true,
+              city: true,
+              province: true,
+              country: true,
+            },
+          },
         },
       });
 

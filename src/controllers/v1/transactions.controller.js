@@ -134,6 +134,27 @@ class TransactionsController {
       res.error(500, error.message, "Server Internal Error");
     }
   }
+
+  async deleteTransaction(req, res) {
+    try {
+      const { transaction_id } = req.params.id;
+      const transaction = await TransactionsModel.deleteTransactionById(
+        transaction_id
+      );
+
+      if (transaction.error) {
+        return res.fail(
+          404,
+          { transaction_id: transaction_id },
+          transaction.error
+        );
+      }
+
+      res.success(200, { transaction }, "Transaction deleted");
+    } catch (error) {
+      res.error(500, error.message, "Server Internal Error");
+    }
+  }
 }
 
 module.exports = new TransactionsController();

@@ -55,6 +55,10 @@ class TransactionsModel {
         },
       });
 
+      if (!transaction) {
+        throw new Error("Transaction not found");
+      }
+
       const { account: from_account, user: from_user } =
         await this.findAccountAndUserData(transaction.from_account_number);
 
@@ -225,6 +229,30 @@ class TransactionsModel {
         });
 
         return transaction;
+      });
+
+      return result;
+    } catch (error) {
+      return { error: error.message };
+    }
+  }
+
+  async deleteTransactionById(transaction_id) {
+    try {
+      const transaction = await prisma.transaction.findUnique({
+        where: {
+          id: transaction_id,
+        },
+      });
+
+      if (!transaction) {
+        throw new Error("Transaction not found");
+      }
+
+      const result = await prisma.transaction.delete({
+        where: {
+          id: transaction_id,
+        },
       });
 
       return result;

@@ -39,5 +39,6 @@ router.post(
 // PUT an transaction by id
 
 // DELETE an transaction by id
+router.delete("/:id", TransactionsController.deleteTransaction);
 
 module.exports = router;

@@ -54,7 +54,7 @@ class AccountController {
         +balance
       );
 
-      res.success(200, { account: account }, "Account created");
+      res.success(201, { account: account }, "Account created");
     } catch (error) {
       res.error(500, error.message, "Server Internal Error");
     }

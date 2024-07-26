@@ -199,7 +199,7 @@ class UsersController {
         return res.fail(404, { user_id: user_id }, user.error);
       }
 
-      res.success(200, { user_id: user_id }, "User deleted");
+      res.success(200, { user }, "User deleted");
     } catch (error) {
       res.error(500, error.message, "Server Internal Error");
     }
