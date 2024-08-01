@@ -14,11 +14,21 @@ const validateUser = [
       return next();
     }
 
-    res.status(400).json({ errors: results.array() });
+    const errorsArr = results.array().map((result) => {
+      return { [`${result.path}`]: result.msg };
+    });
+
+    res.status(400).json({ errors: errorsArr });
   },
 ];
 
-const validateProfileAndAddress = [
+const validateUserProfileAndAddress = [
+  check("first_name").notEmpty().withMessage("First Name is required"),
+  check("last_name").notEmpty().withMessage("Last Name is required"),
+  check("email").isEmail().withMessage("Provide a valid email"),
+  check("password")
+    .isLength({ min: 6 })
+    .withMessage("Password must be 6 or more characters"),
   check("identity_type")
     .isIn(["KTP", "KK", "Passport"])
     .withMessage("Please provide valid identity type (KTP, KK, or Passport)"),
@@ -44,7 +54,12 @@ const validateProfileAndAddress = [
       return next();
     }
 
-    res.status(400).json({ errors: results.array() });
+    const errorsArr = results.array().map((result) => {
+      return { property: result.path, message: result.msg };
+    });
+
+    res.fail(400, errorsArr, "Validation failed");
+    // res.status(400).json({ errors: results.array() });
   },
 ];
 
@@ -156,7 +171,7 @@ const validateWithdrawTransaction = [
 
 module.exports = {
   validateUser,
-  validateProfileAndAddress,
+  validateUserProfileAndAddress,
   validateAccount,
   validateUpdateAccount,
   validateTransferTransaction,

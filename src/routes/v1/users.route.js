@@ -1,7 +1,6 @@
 const { Router } = require("express");
 const {
-  validateUser,
-  validateProfileAndAddress,
+  validateUserProfileAndAddress,
 } = require("../../middlewares/validateInputs");
 
 const { UserController } = require("../../controllers").V1_CONTROLLER;
@@ -15,18 +14,12 @@ router.get("/", UserController.getAllUsers);
 router.get("/:id", UserController.getUserById);
 
 // POST an user
-router.post(
-  "/",
-  validateUser,
-  validateProfileAndAddress,
-  UserController.createUser
-);
+router.post("/", validateUserProfileAndAddress, UserController.createUser);
 
 // PUT an user by id
 router.put(
   "/:id",
-  validateUser,
-  validateProfileAndAddress,
+  validateUserProfileAndAddress,
   UserController.updateUserById
 );
 

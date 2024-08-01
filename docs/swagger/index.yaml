@@ -1,0 +1,24 @@
+openapi: 3.0.3
+info:
+  title: Swagger Binar Bank Challenge Chapter 4 API Documentation
+  description: >-
+    This is a sample Pet Store Server based on the OpenAPI 3.0 specification. 
+    You can find out more about
+
+    Some useful link(s):
+
+    - [Binar BE Challenge CH4 Repository](https://github.com/jhontriboyke/binar-be-challenge-ch4)
+  contact:
+    email: jhontriboyke@gmail.com
+  version: 1.0.0
+servers:
+  - url: http://localhost:PORT/api/v1
+tags:
+  - name: user
+    description: User endpoints
+  - name: account
+    description: Account endpoints
+  - name: transaction
+    description: Transaction endpoints
+paths:
+  $ref: "./paths/index.yaml"

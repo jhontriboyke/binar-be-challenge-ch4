@@ -1,0 +1,6 @@
+User:
+  $ref: './User.yaml'
+Profile:
+  $ref: './Profile.yaml'
+Address:
+  $ref: './Address.yaml'

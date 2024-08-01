@@ -1,0 +1,8 @@
+type: object
+properties:
+  user:
+    $ref: "./User.yaml"
+  profile:
+    $ref: "./Profile.yaml"
+  address:
+    $ref: "./Address.yaml"

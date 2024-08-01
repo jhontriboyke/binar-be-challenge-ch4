@@ -10,4 +10,7 @@ package-lock.json
 # Ignore .DS_Store
 .DS_Store
 
+# Ignore files
 TODO.txt
+*.zip
+*.rar

@@ -1,0 +1,23 @@
+type: object
+properties:
+  id:
+    type: string
+    example: c2c31e1c-e246-450f-b79c-75835ead8660
+  street:
+    type: string
+    example: Patih Rumbih
+  village:
+    type: string
+    example: Hampatung
+  postal_code:
+    type: string
+    example: 73511
+  city:
+    type: string
+    example: Kuala Kapuas
+  province:
+    type: string
+    example: Kalimantan Tengah
+  country:
+    type: string
+    example: Indonesia
