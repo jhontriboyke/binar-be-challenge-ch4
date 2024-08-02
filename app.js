@@ -1,6 +1,7 @@
 // Module import
 const express = require("express");
 const morgan = require("morgan");
+require("module-alias/register");
 
 // Import format middlewares
 const responseFormat = require("./src/middlewares/responseFormat");

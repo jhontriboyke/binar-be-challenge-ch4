@@ -99,10 +99,16 @@ class UserModel {
           },
         });
 
+        delete user.password;
+        delete profile.user_id;
+        delete address.user_id;
+
         return {
-          user: user,
-          profile: profile,
-          address: address,
+          user: {
+            ...user,
+            profile: profile,
+            address: address,
+          },
         };
       });
 

@@ -1,7 +1,7 @@
 # User API
 /users:
-    get:
-      $ref: './users/get-all-users.yaml'
+  get:
+    $ref: "./users/get-all-users.yaml"
 /users/{id}:
-    get:
-      $ref: './users/get-user-by-id.yaml'
+  get:
+    $ref: "./users/get-user-by-id.yaml"
