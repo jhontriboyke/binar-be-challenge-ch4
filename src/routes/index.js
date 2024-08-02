@@ -2,11 +2,9 @@ const express = require("express");
 const router = express.Router();
 
 // Import swagger
-const path = require("path");
-const yaml = require("yamljs");
+
 const swaggerUI = require("swagger-ui-express");
-const swaggerPath = path.join(__dirname, "../../docs/swagger/swagger-v2.yaml");
-const swaggerDoc = yaml.load(swaggerPath);
+const swaggerDoc = require("../../docs/swagger/index.json");
 
 // Import routes
 const V1_ROUTES = require("./v1/");

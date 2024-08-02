@@ -1,7 +1,17 @@
-# User API
+# User API Endpoints
 /users:
   get:
     $ref: "./users/get-all-users.yaml"
+  post:
+    $ref: "./users/post-new-user.yaml"
 /users/{id}:
   get:
     $ref: "./users/get-user-by-id.yaml"
+
+# Account API Endpoints
+/accounts:
+  get:
+    $ref: "./accounts/get-all-accounts.yaml"
+/accounts/{id}:
+  get:
+    $ref: "./accounts/get-account-by-id.yaml"

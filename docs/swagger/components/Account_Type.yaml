@@ -1,0 +1,11 @@
+type: object
+properties:
+  id:
+    type: integer
+    exapmle: 2
+  name:
+    type: string
+    example: Premium
+  description:
+    type: string
+    example: For you to overcome everything

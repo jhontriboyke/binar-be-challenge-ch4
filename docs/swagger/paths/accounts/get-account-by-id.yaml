@@ -1,19 +1,19 @@
 tags:
-  - user
-summary: Get an user by id
-description: Retrieve an user by user id as parameter
+  - account
+summary: Get an account by id
+description: Retrieve an account by account id as parameter
 parameters:
-  - name: userId
+  - name: accountId
     in: path
-    description: ID of user
+    description: ID of account
     required: true
     schema:
       type: string
       format: uuid
-      example: effee1ce-cd7d-4719-83f4-6cf18d97ad3b
+      example: 764e40d6-696a-47e1-8ae7-c233142b732e
 responses:
   "200":
-    description: Data retrieved successfully
+    description: Account retrieved successfully
     content:
       application/json:
         schema:
@@ -24,13 +24,12 @@ responses:
               example: Success
             message:
               type: string
-              example: User found
+              example: Account found
             data:
               type: object
               properties:
-                user:
-                  $ref: "../../components/UserById.yaml"
-
+                account:
+                  $ref: "../../components/AccountById.yaml"
   "404":
     description: Data did not found
     content:
@@ -43,10 +42,10 @@ responses:
               example: Failed
             message:
               type: string
-              example: User not found
+              example: Account not found
             data:
               type: object
               properties:
-                user_id:
+                account_id:
                   type: string
                   example: effee1ce-cd7d-4719-83f4-6cf18d97ad3b

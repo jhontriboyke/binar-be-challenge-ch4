@@ -1,6 +1,17 @@
-User:
-  $ref: './User.yaml'
-Profile:
-  $ref: './Profile.yaml'
-Address:
-  $ref: './Address.yaml'
+schemas:
+  User:
+    $ref: "./User.yaml"
+  UserById:
+    $ref: "./UserById.yaml"
+  Profile:
+    $ref: "./Profile.yaml"
+  Address:
+    $ref: "./Address.yaml"
+  CreateUser:
+    $ref: "./CreateUser.yaml"
+  Account_Type:
+    $ref: "./Account_Type.yaml"
+  Account:
+    $ref: "./Account.yaml"
+  AccountById:
+    $ref: "./AccountById.yaml"

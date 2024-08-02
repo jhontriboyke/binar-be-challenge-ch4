@@ -2,8 +2,21 @@ openapi: 3.0.3
 info:
   title: Binar Bank Challenge Chapter 4 API Documentation
   description: >-
-    This is a sample Pet Store Server based on the OpenAPI 3.0 specification. 
-    You can find out more about
+    This is a part of Binar JavaScript Backend Bootcamp - FGA Batch 2 Challenge Chapter 4. 
+
+    The challenge is to build a _simple_ Bank System REST API where can handle basic CRUD (Create, Read, Update, dan Delete) operations.
+
+
+    The REST API for now only supported on your localhost server, please provide and define your .env file.
+
+
+    **Documentation will update accordingly**.
+
+
+    Below are the detailed information on how to use the API, including all endpoints to use, request methods, and example responses.
+
+
+
 
     Some useful link(s):
 
@@ -22,3 +35,5 @@ tags:
     description: Transaction endpoints
 paths:
   $ref: "./paths/index.yaml"
+components:
+  $ref: "./components/index.yaml"

@@ -1,0 +1,54 @@
+tags:
+  - user
+summary: Create a new user
+description: Add a new user
+operationId: createUser
+requestBody:
+  description: Create a new user by passing request body
+  content:
+    application/json:
+      schema:
+        $ref: "../../components/CreateUser.yaml"
+responses:
+  "201":
+    description: User created successfully
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: string
+              example: Success
+            message:
+              type: string
+              example: User created
+            data:
+              type: object
+              properties:
+                user:
+                  $ref: "../../components/UserById.yaml"
+  "400":
+    description: Invalid input
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: string
+              example: fail
+            message:
+              type: string
+              example: Validation failed
+            data:
+              type: array
+              items:
+                type: object
+                properties:
+                  property:
+                    type: string
+                    example: "street"
+                  message:
+                    type: string
+                    example: Street name is required

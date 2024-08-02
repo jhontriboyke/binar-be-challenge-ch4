@@ -1,0 +1,51 @@
+type: object
+properties:
+  first_name:
+    type: string
+    example: Doe
+  last_name:
+    type: string
+    example: Doe
+  email:
+    type: string
+    example: johndoe@mail.com
+  password:
+    type: string
+    example: 123456!
+  identity_number:
+    type: string
+    example: 6203111122223333
+  identity_type:
+    type: string
+    default: KTP
+    enum:
+      - KTP
+      - KK
+      - Passport
+  phone_number:
+    type: string
+    example: 081122334455
+  nationality:
+    type: string
+    example: US
+  job:
+    type: string
+    example: Web Developer
+  street:
+    type: string
+    example: Patih Rumbih
+  village:
+    type: string
+    example: Hampatung
+  postal_code:
+    type: string
+    example: 73511
+  city:
+    type: string
+    example: Kuala Kapuas
+  province:
+    type: string
+    example: Kalimantan Tengah
+  country:
+    type: string
+    example: Indonesia

@@ -31,7 +31,13 @@ class AccountsModel {
           number: true,
           pin_number: true,
           balance: true,
-          account_type_id: true,
+          account_type: {
+            select: {
+              id: true,
+              name: true,
+              description: true,
+            },
+          },
           user: {
             select: {
               id: true,

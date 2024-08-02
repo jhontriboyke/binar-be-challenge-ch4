@@ -4,7 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "generate:doc": "swagger-cli bundle ./docs/swagger/index.yaml --outfile ./docs/swagger/index.json"
   },
   "keywords": [],
   "author": "",

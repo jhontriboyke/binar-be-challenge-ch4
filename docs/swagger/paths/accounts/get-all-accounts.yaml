@@ -1,8 +1,8 @@
 tags:
-  - user
-summary: Get all users
-description: Retrieve all existing users
-operationId: getAllUsers
+  - account
+summary: Get all accounts
+description: Retrieve all existing accounts
+operationId: getAllAccounts
 responses:
   "200":
     description: Data retrieved successfully
@@ -22,10 +22,10 @@ responses:
               data:
                 type: object
                 properties:
-                  users:
+                  accounts:
                     type: array
                     items:
-                      $ref: "../../components/User.yaml"
+                      $ref: "../../components/Account.yaml"
   "204":
     description: No content - there are no users available
     content:
@@ -40,11 +40,11 @@ responses:
                 example: Success
               message:
                 type: string
-                example: No users data available
+                example: No accounts data available
               data:
                 type: object
                 properties:
-                  users:
+                  accounts:
                     type: array
                     items:
                       type: object
