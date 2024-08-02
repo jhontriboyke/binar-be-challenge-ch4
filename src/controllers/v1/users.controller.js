@@ -1,5 +1,4 @@
 const bcrypt = require("bcrypt");
-const { v4: uuidv4 } = require("uuid");
 const { UserModel } = require("../../models").V1_MODELS;
 
 class UsersController {

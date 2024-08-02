@@ -1,6 +1,3 @@
-const {
-  PrismaClientKnownRequestError,
-} = require("@prisma/client/runtime/library");
 const prisma = require("../../../config/prisma");
 
 class UserModel {
@@ -80,6 +77,17 @@ class UserModel {
 
   async createUserProfileAddress(user_obj, profile_obj, address_obj) {
     try {
+      // Check if email exist
+      const email = await prisma.user.findUnique({
+        where: {
+          email: user_obj.email,
+        },
+      });
+
+      if (email) {
+        throw new Error("Email already exists");
+      }
+
       const result = await prisma.$transaction(async (prisma) => {
         const user = await prisma.user.create({
           data: user_obj,

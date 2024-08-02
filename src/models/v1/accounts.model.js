@@ -68,6 +68,13 @@ class AccountsModel {
     balance
   ) {
     try {
+      // Check if account_number exist
+      const account_number = await prisma.accounts.findUnique({
+        where: {
+          number: number,
+        },
+      });
+
       const result = await prisma.accounts.create({
         data: {
           user_id: user_id,

@@ -5,9 +5,7 @@
 This repository is a part of Binar JavaScript Backend Bootcamp - FGA Batch 2 Challenge Chapter 4. The challenge is to build a _simple_ Bank System REST API where can handle basic CRUD (Create, Read, Update, dan Delete) operations.
 
 The REST API for now only supported on your localhost server, please provide and define your .env file.\
-**Further update for online server will be implemented**.
-
-Below are the detailed information on how to use the API, including all endpoints to use, request methods, and example responses.
+**Further update will be implement accordingly**.
 
 ## Base URL
 

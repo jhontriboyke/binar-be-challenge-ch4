@@ -1,27 +1,5 @@
 const { check, validationResult } = require("express-validator");
 
-const validateUser = [
-  check("first_name").notEmpty().withMessage("First Name is required"),
-  check("last_name").notEmpty().withMessage("Last Name is required"),
-  check("email").isEmail().withMessage("Provide a valid email"),
-  check("password")
-    .isLength({ min: 6 })
-    .withMessage("Password must be 6 or more characters"),
-  (req, res, next) => {
-    const results = validationResult(req);
-
-    if (results.isEmpty()) {
-      return next();
-    }
-
-    const errorsArr = results.array().map((result) => {
-      return { [`${result.path}`]: result.msg };
-    });
-
-    res.status(400).json({ errors: errorsArr });
-  },
-];
-
 const validateUserProfileAndAddress = [
   check("first_name").notEmpty().withMessage("First Name is required"),
   check("last_name").notEmpty().withMessage("Last Name is required"),
@@ -58,8 +36,7 @@ const validateUserProfileAndAddress = [
       return { property: result.path, message: result.msg };
     });
 
-    res.fail(400, errorsArr, "Validation failed");
-    // res.status(400).json({ errors: results.array() });
+    res.fail(403, errorsArr, "Error validation");
   },
 ];
 
@@ -85,7 +62,11 @@ const validateAccount = [
       return next();
     }
 
-    res.status(400).json({ errors: results.array() });
+    const errorsArr = results.array().map((result) => {
+      return { property: result.path, message: result.msg };
+    });
+
+    res.fail(403, errorsArr, "Error validation");
   },
 ];
 
@@ -108,7 +89,11 @@ const validateUpdateAccount = [
       return next();
     }
 
-    res.status(400).json({ errors: results.array() });
+    const errorsArr = results.array().map((result) => {
+      return { property: result.path, message: result.msg };
+    });
+
+    res.fail(403, errorsArr, "Error validation");
   },
 ];
 
@@ -129,7 +114,11 @@ const validateTransferTransaction = [
       return next();
     }
 
-    res.status(400).json({ errors: results.array() });
+    const errorsArr = results.array().map((result) => {
+      return { property: result.path, message: result.msg };
+    });
+
+    res.fail(403, errorsArr, "Error validation");
   },
 ];
 
@@ -147,7 +136,11 @@ const validateDepositTransaction = [
       return next();
     }
 
-    res.status(400).json({ errors: results.array() });
+    const errorsArr = results.array().map((result) => {
+      return { property: result.path, message: result.msg };
+    });
+
+    res.fail(403, errorsArr, "Error validation");
   },
 ];
 
@@ -165,12 +158,15 @@ const validateWithdrawTransaction = [
       return next();
     }
 
-    res.status(400).json({ errors: results.array() });
+    const errorsArr = results.array().map((result) => {
+      return { property: result.path, message: result.msg };
+    });
+
+    res.fail(403, errorsArr, "Error validation");
   },
 ];
 
 module.exports = {
-  validateUser,
   validateUserProfileAndAddress,
   validateAccount,
   validateUpdateAccount,

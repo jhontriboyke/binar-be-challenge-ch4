@@ -1,8 +1,0 @@
-{
-    "watch": [
-        "src",
-        "docs/swagger"
-    ],
-    "ext": "js,json,yaml",
-    "exec": "node ./app.js"
-}
