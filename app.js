@@ -23,8 +23,4 @@ app.use("/api", API_ROUTES);
 // Error handler middleware
 app.use(notFoundHandler);
 
-// Server Logger
-const PORT = process.env.SERVER_PORT;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+module.exports = app;
