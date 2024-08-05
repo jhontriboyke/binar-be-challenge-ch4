@@ -1,0 +1,15 @@
+-- AlterTable
+ALTER TABLE "Address" ALTER COLUMN "street" DROP NOT NULL,
+ALTER COLUMN "zip_code" DROP NOT NULL,
+ALTER COLUMN "city" DROP NOT NULL,
+ALTER COLUMN "province" DROP NOT NULL,
+ALTER COLUMN "country" DROP NOT NULL;
+
+-- AlterTable
+ALTER TABLE "Profile" ALTER COLUMN "date_of_birth" DROP NOT NULL,
+ALTER COLUMN "gender" DROP NOT NULL,
+ALTER COLUMN "identity_type" DROP NOT NULL,
+ALTER COLUMN "identity_number" DROP NOT NULL,
+ALTER COLUMN "phone_number" DROP NOT NULL,
+ALTER COLUMN "occupation" DROP NOT NULL,
+ALTER COLUMN "nationality" DROP NOT NULL;

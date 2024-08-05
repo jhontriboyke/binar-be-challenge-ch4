@@ -1,208 +1,89 @@
-const bcrypt = require("bcrypt");
-const { UserModel } = require("../../models").V1_MODELS;
-
-class UsersController {
-  async getAllUsers(req, res) {
+const { UserServices } = require("../../services/").V1_SERVICES;
+class UsersControllers {
+  async getAllUsers(req, res, next) {
     try {
-      const users = await UserModel.getAllUsers();
+      const users = await UserServices.getAllUsers();
 
       if (users.length === 0) {
-        return res.success(200, { users: users }, "Users data are empty");
+        return res.success(200, "Users data are empty", { users: users });
       }
 
-      res.success(200, { users: users }, "Data retrieved successfully");
+      res.success(200, "Data retrieved successfully", { users: users });
     } catch (error) {
-      res.error(500, error.message, "Server Internal Error");
+      next(error);
     }
   }
 
-  async getUserById(req, res) {
+  async getUserById(req, res, next) {
     try {
       const user_id = req.params.id;
-      const user = await UserModel.getUserById(user_id);
+      const user = await UserServices.getUserById(user_id);
 
-      if (user.error) {
-        return res.fail(404, { user_id: user_id }, user.error);
-      }
-
-      res.success(200, { user: user }, "Data retrieved successfully");
+      res.success(200, "User found", { user: user });
     } catch (error) {
-      res.error(500, error.message, "Server Internal Error");
+      next(error);
     }
   }
 
-  async createUser(req, res) {
+  async createUser(req, res, next) {
     try {
       const {
         first_name,
         last_name,
         email,
         password,
+        date_of_birth,
+        gender,
         identity_type,
         identity_number,
         phone_number,
+        occupation,
         nationality,
-        job,
         street,
         village,
-        postal_code,
+        zip_code,
         city,
         province,
         country,
       } = req.body;
 
-      const salt = 10;
-      const hashed_password = await bcrypt.hash(password, salt);
-
       const user_obj = {
-        first_name,
-        last_name,
-        email,
-        password: hashed_password,
-      };
-
-      const profile_obj = {
-        identity_type,
-        identity_number,
-        phone_number,
-        nationality,
-        job,
-      };
-
-      const address_obj = {
-        street,
-        village,
-        postal_code,
-        city,
-        province,
-        country,
-      };
-
-      const result = await UserModel.createUserProfileAddress(
-        user_obj,
-        profile_obj,
-        address_obj
-      );
-
-      if (result.error) {
-        throw new Error(result.error);
-      }
-
-      res.success(201, result, "User created");
-    } catch (error) {
-      res.error(500, error.message, "Server Internal Error");
-    }
-  }
-
-  async updateUserById(req, res) {
-    try {
-      const user_id = req.params.id;
-      const {
         first_name,
         last_name,
         email,
         password,
-        identity_type,
-        identity_number,
-        phone_number,
-        nationality,
-        job,
-        street,
-        village,
-        postal_code,
-        city,
-        province,
-        country,
-      } = req.body;
-
-      const salt = 10;
-      const hashed_password = await bcrypt.hash(password, salt);
-
-      const user_obj = {
-        first_name,
-        last_name,
-        email,
-        password: hashed_password,
       };
 
       const profile_obj = {
+        date_of_birth,
+        gender,
         identity_type,
         identity_number,
         phone_number,
+        occupation,
         nationality,
-        job,
       };
 
       const address_obj = {
         street,
         village,
-        postal_code,
+        zip_code,
         city,
         province,
         country,
       };
 
-      const result = await UserModel.updateUser(
-        user_id,
+      const new_user = await UserServices.createUser(
         user_obj,
         profile_obj,
         address_obj
       );
 
-      // const user = await UserModel.updateUserById(
-      //   first_name,
-      //   last_name,
-      //   email,
-      //   hashed_password
-      // );
-
-      // if (user instanceof Error) {
-      //   return res.fail(404, { user_id: user_id }, user.message);
-      // }
-
-      // const profile = await UserModel.updateProfileByUserId(
-      //   user_id,
-      //   identity_type,
-      //   identity_number,
-      //   phone_number,
-      //   nationality,
-      //   job
-      // );
-
-      // const address = await UserModel.updateAddressByProfileId(
-      //   profile.id,
-      //   street,
-      //   village,
-      //   postal_code,
-      //   city,
-      //   province,
-      //   country
-      // );
-
-      if (result.error) {
-        throw new Error(error);
-      }
-
-      res.success(200, result, "User updated");
+      res.success(201, "User created", { user: new_user });
     } catch (error) {
-      res.error(500, error.message, "Server Internal Error");
-    }
-  }
-
-  async deleteUserById(req, res) {
-    try {
-      const user_id = req.params.id;
-      const user = await UserModel.deleteUser(user_id);
-
-      if (user.error) {
-        return res.fail(404, { user_id: user_id }, user.error);
-      }
-
-      res.success(200, { user }, "User deleted");
-    } catch (error) {
-      res.error(500, error.message, "Server Internal Error");
+      next(error);
     }
   }
 }
 
-module.exports = new UsersController();
+module.exports = new UsersControllers();

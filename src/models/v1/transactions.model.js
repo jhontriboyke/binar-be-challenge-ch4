@@ -2,15 +2,10 @@ const prisma = require("../../../config/prisma");
 
 class TransactionsModel {
   async getAllTransactions(queries) {
-    try {
-      const results = await prisma.transaction.findMany({
-        where: queries,
-      });
-
-      return results;
-    } catch (error) {
-      return { error: error.message };
-    }
+    return await prisma.transaction.findMany({
+      where: { type: queries.type },
+      orderBy: queries.orderBy,
+    });
   }
 
   async findAccountAndUserData(account_number) {
@@ -43,7 +38,7 @@ class TransactionsModel {
         user,
       };
     } catch (error) {
-      return error;
+      throw error;
     }
   }
 
@@ -56,54 +51,21 @@ class TransactionsModel {
       });
 
       if (!transaction) {
-        throw new Error("Transaction not found");
+        return null;
       }
 
-      const { account: from_account, user: from_user } =
-        await this.findAccountAndUserData(transaction.from_account_number);
-
-      const { account: to_account, user: to_user } =
-        await this.findAccountAndUserData(transaction.to_account_number);
-
-      return {
-        id: transaction.id,
-        type: transaction.type,
-        amount: transaction.amount,
-        date: transaction.date,
-        from_account: {
-          ...from_account,
-          user: {
-            ...from_user,
-          },
-        },
-        to_account: {
-          ...to_account,
-          user: {
-            ...to_user,
-          },
-        },
-      };
+      return transaction;
     } catch (error) {
-      return { error: error.message };
+      throw error;
     }
   }
 
-  async createDeposit(to_account_number, amount) {
+  async createDeposit(to_account, amount) {
     try {
-      const to_account = await prisma.accounts.findUnique({
-        where: {
-          number: to_account_number,
-        },
-      });
-
-      if (!to_account) {
-        throw new Error("Account not found");
-      }
-
-      const result = await prisma.$transaction(async (prisma) => {
+      return await prisma.$transaction(async (prisma) => {
         await prisma.accounts.update({
           where: {
-            number: to_account_number,
+            number: to_account.number,
           },
           data: {
             balance: to_account.balance + amount,
@@ -113,7 +75,7 @@ class TransactionsModel {
         const transaction = await prisma.transaction.create({
           data: {
             from_account_number: null,
-            to_account_number: to_account_number,
+            to_account_number: to_account.number,
             amount: amount,
             type: "deposit",
           },
@@ -121,29 +83,17 @@ class TransactionsModel {
 
         return transaction;
       });
-
-      return result;
     } catch (error) {
-      return { error: error.message };
+      throw error;
     }
   }
 
-  async createWithdraw(from_account_number, amount) {
+  async createWithdraw(from_account, amount) {
     try {
-      const from_account = await prisma.accounts.findUnique({
-        where: {
-          number: from_account_number,
-        },
-      });
-
-      if (!from_account) {
-        throw new Error("Account not found");
-      }
-
-      const result = await prisma.$transaction(async (prisma) => {
+      return await prisma.$transaction(async (prisma) => {
         await prisma.accounts.update({
           where: {
-            number: from_account_number,
+            number: from_account.number,
           },
           data: {
             balance: from_account.balance - amount,
@@ -152,7 +102,7 @@ class TransactionsModel {
 
         const transaction = await prisma.transaction.create({
           data: {
-            from_account_number: from_account_number,
+            from_account_number: from_account.number,
             to_account_number: null,
             amount: amount,
             type: "withdraw",
@@ -161,43 +111,26 @@ class TransactionsModel {
 
         return transaction;
       });
-
-      return result;
     } catch (error) {
-      return { error: error.message };
+      throw error;
     }
   }
 
   async createTransfer(from_account_number, to_account_number, amount) {
     try {
-      // Check from_account_number exist
       const from_account = await prisma.accounts.findUnique({
         where: {
           number: from_account_number,
         },
       });
 
-      if (!from_account) {
-        throw new Error("From account not found");
-      }
-
-      // Check to_account_number exist
       const to_account = await prisma.accounts.findUnique({
         where: {
           number: to_account_number,
         },
       });
 
-      if (!to_account) {
-        throw new Error("To account not found");
-      }
-
-      // Check from_account balance more than amount
-      if (from_account.balance < amount) {
-        throw new Error("Your balance is insufficient");
-      }
-
-      const result = await prisma.$transaction(async () => {
+      return await prisma.$transaction(async (prisma) => {
         // Update from_account balance data (decrease)
         const from_account_updated = await prisma.accounts.update({
           where: {
@@ -219,7 +152,7 @@ class TransactionsModel {
         });
 
         // Add to transactions table
-        const transaction = await prisma.transaction.create({
+        return await prisma.transaction.create({
           data: {
             amount,
             from_account_number: from_account_updated.number,
@@ -227,37 +160,9 @@ class TransactionsModel {
             type: "transfer",
           },
         });
-
-        return transaction;
       });
-
-      return result;
     } catch (error) {
-      return { error: error.message };
-    }
-  }
-
-  async deleteTransactionById(transaction_id) {
-    try {
-      const transaction = await prisma.transaction.findUnique({
-        where: {
-          id: transaction_id,
-        },
-      });
-
-      if (!transaction) {
-        throw new Error("Transaction not found");
-      }
-
-      const result = await prisma.transaction.delete({
-        where: {
-          id: transaction_id,
-        },
-      });
-
-      return result;
-    } catch (error) {
-      return { error: error.message };
+      throw error;
     }
   }
 }

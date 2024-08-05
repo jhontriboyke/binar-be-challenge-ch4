@@ -1,7 +1,5 @@
 const prisma = require("../config/prisma");
 
-// Fixed data for Account_Types table
-// Put data here to add more
 const account_types = [
   { name: "Basic", description: "This a basic account for everyone" },
   { name: "Premium", description: "For you to overcome everything" },

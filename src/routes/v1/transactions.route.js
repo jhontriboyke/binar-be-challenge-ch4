@@ -1,9 +1,7 @@
 const { Router } = require("express");
-const {
-  validateDepositTransaction,
-  validateTransferTransaction,
-  validateWithdrawTransaction,
-} = require("../../middlewares/validateInputs");
+const validateTransferTransaction = require("../../middlewares/validations/transaction/transfer-validation.middleware");
+const validateDepositTransaction = require("../../middlewares/validations/transaction/deposit-validation.middleware");
+const validateWithdrawTransaction = require("../../middlewares/validations/transaction/withdraw-validation.middleware");
 const { TransactionsController } =
   require("../../controllers/index").V1_CONTROLLER;
 
@@ -39,6 +37,5 @@ router.post(
 // PUT an transaction by id
 
 // DELETE an transaction by id
-router.delete("/:id", TransactionsController.deleteTransaction);
 
 module.exports = router;
