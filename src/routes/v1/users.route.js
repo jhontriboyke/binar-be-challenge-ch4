@@ -4,23 +4,19 @@ const validateUser = require("../../middlewares/validations/user-validation.midd
 
 const router = Router();
 
-// Get all existing users
+/* GET all users */
 router.get("/", UserController.getAllUsers);
 
-// Get an user by user_id
+/* Get user by id */
 router.get("/:id", UserController.getUserById);
 
-// Create a new user
+/* POST a new user */
 router.post("/", validateUser, UserController.createUser);
 
-// // PUT an user by id
-// router.put(
-//   "/:id",
-//   validateUserProfileAndAddress,
-//   UserController.updateUserById
-// );
+/* PUT to update a user by id */
+router.put("/:id", validateUser, UserController.updateUserById);
 
-// // DELETE an user by id
-// router.delete("/:id", UserController.deleteUserById);
+/* DELETE an user by id */
+router.delete("/:id", UserController.deleteUserById);
 
 module.exports = router;

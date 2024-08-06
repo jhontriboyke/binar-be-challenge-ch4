@@ -84,6 +84,81 @@ class UsersControllers {
       next(error);
     }
   }
+
+  async updateUserById(req, res, next) {
+    try {
+      const user_id = req.params.id;
+
+      const {
+        first_name,
+        last_name,
+        email,
+        password,
+        date_of_birth,
+        gender,
+        identity_type,
+        identity_number,
+        phone_number,
+        occupation,
+        nationality,
+        street,
+        village,
+        zip_code,
+        city,
+        province,
+        country,
+      } = req.body;
+
+      const user_obj = {
+        first_name,
+        last_name,
+        email,
+        password,
+      };
+
+      const profile_obj = {
+        date_of_birth,
+        gender,
+        identity_type,
+        identity_number,
+        phone_number,
+        occupation,
+        nationality,
+      };
+
+      const address_obj = {
+        street,
+        village,
+        zip_code,
+        city,
+        province,
+        country,
+      };
+
+      const updated_user = await UserServices.updateUserById(
+        user_id,
+        user_obj,
+        profile_obj,
+        address_obj
+      );
+
+      res.success(200, "User updated", { user: updated_user });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async deleteUserById(req, res, next) {
+    try {
+      const user_id = req.params.id;
+
+      const deleted_user = await UserServices.deleteUserById(user_id);
+
+      res.success(200, "User deleted", { user: deleted_user });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 module.exports = new UsersControllers();
