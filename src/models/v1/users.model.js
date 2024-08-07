@@ -1,4 +1,5 @@
 const prisma = require("../../../config/prisma");
+const Role = require("../../_helpers/role");
 
 class UserModel {
   async getAllUsers() {
@@ -8,7 +9,7 @@ class UserModel {
         first_name: true,
         last_name: true,
         email: true,
-        password: true,
+        role: true,
       },
     });
   }
@@ -23,6 +24,7 @@ class UserModel {
         first_name: true,
         last_name: true,
         email: true,
+        role: true,
         profile: {
           select: {
             phone_number: true,
@@ -55,6 +57,8 @@ class UserModel {
         first_name: true,
         last_name: true,
         email: true,
+        password: true,
+        role: true,
         profile: true,
       },
     });
@@ -182,6 +186,17 @@ class UserModel {
     return await prisma.user.delete({
       where: {
         id: user_id,
+      },
+    });
+  }
+
+  async upgradeRoleToAdmin(user_id) {
+    return await prisma.user.update({
+      where: {
+        id: user_id,
+      },
+      data: {
+        role: Role.Admin,
       },
     });
   }

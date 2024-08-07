@@ -25,8 +25,18 @@ class DuplicationError extends Error {
   }
 }
 
+class UnauthorizedError extends Error {
+  constructor(message, data = null) {
+    super(message, data);
+    this.name = "UnauthorizedError";
+    this.statusCode = 403;
+    this.data = data;
+  }
+}
+
 module.exports = {
   ValidationError,
   NotFoundError,
   DuplicationError,
+  UnauthorizedError,
 };

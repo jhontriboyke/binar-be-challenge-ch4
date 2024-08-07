@@ -53,6 +53,21 @@ class AccountServices {
       throw error;
     }
   }
+
+  async updateAccountById(account_id, account_obj) {
+    // Check if account exist by id
+    const isAccountExist = await this.getAccountById(account_id);
+
+    if (!isAccountExist) {
+      throw error;
+    }
+
+    try {
+      return await AccountsModel.updateAccountById(account_id, account_obj);
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 module.exports = new AccountServices();

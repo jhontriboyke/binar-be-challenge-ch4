@@ -1,15 +1,11 @@
 const { check, validationResult } = require("express-validator");
 const { ValidationError } = require("../../errors/customErrors");
 
-const validateUpdateAccount = [
-  check("account_type_id")
-    .isIn([1, 2, 3])
-    .withMessage(
-      "Please choose a number for your Account Type (1: Basic, 2: Premium, 3: Deluxe)"
-    ),
-  check("pin_number")
-    .isLength({ min: 6, max: 6 })
-    .withMessage("Pin Number should be exact 6 digits"),
+const validateLoginUser = [
+  check("email").isEmail().withMessage("Provide a valid email"),
+  check("password")
+    .isLength({ min: 6 })
+    .withMessage("Password must be 6 or more characters"),
   (req, res, next) => {
     const results = validationResult(req);
 
@@ -25,4 +21,4 @@ const validateUpdateAccount = [
   },
 ];
 
-module.exports = validateUpdateAccount;
+module.exports = validateLoginUser;

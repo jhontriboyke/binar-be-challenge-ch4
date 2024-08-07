@@ -3,6 +3,7 @@ const { UserModel, ProfileModel } = require("../../models").V1_MODELS;
 const {
   NotFoundError,
   DuplicationError,
+  UnauthorizedError,
 } = require("../../errors/customErrors");
 
 class UserServices {
@@ -20,6 +21,33 @@ class UserServices {
     }
 
     return user;
+  }
+
+  async getUserByIdWithRole(user_from_param, user_from_token) {
+    if (user_from_token.role === "Admin") {
+      // Check id from both user
+      if (user_from_token.id === user_from_param.id) {
+        return user_from_param;
+      }
+
+      // If not same
+      return {
+        id: user_from_param.id,
+        email: user_from_param.email,
+        first_name: user_from_param.email,
+        last_name: user_from_param.email,
+        from: "Admin",
+      };
+    }
+
+    if (user_from_token.role === "User") {
+      // Check id from both user
+      if (user_from_token.id !== user_from_param.id) {
+        throw new UnauthorizedError("You cannot access this resource");
+      }
+
+      return user_from_param;
+    }
   }
 
   /* POST new user */
@@ -143,6 +171,34 @@ class UserServices {
 
     try {
       return await UserModel.deleteUser(user_id);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async upgradeUserById(user_id_from_param, user_id_from_token) {
+    // Check user_id (s) match
+    if (user_id_from_param !== user_id_from_token) {
+      throw new UnauthorizedError(
+        "You do not have permission to access this resource"
+      );
+    }
+
+    // Check if user_id_from_param exist
+    await this.getUserById(user_id_from_param);
+
+    // Check if user_id_from_token exist
+    await this.getUserById(user_id_from_token);
+
+    try {
+      const upgraded_user = await UserModel.upgradeRoleToAdmin(
+        user_id_from_param
+      );
+      return {
+        id: upgraded_user.id,
+        email: upgraded_user.email,
+        role: upgraded_user.role,
+      };
     } catch (error) {
       throw error;
     }

@@ -67,6 +67,19 @@ class AccountsModel {
       throw error;
     }
   }
+
+  async updateAccountById(account_id, account_obj) {
+    try {
+      return await prisma.accounts.update({
+        where: {
+          id: account_id,
+        },
+        data: account_obj,
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 module.exports = new AccountsModel();

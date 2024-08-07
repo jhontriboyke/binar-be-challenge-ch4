@@ -1,3 +1,5 @@
+const { UnauthorizedError } = require("../../errors/customErrors");
+
 const { UserServices } = require("../../services/").V1_SERVICES;
 class UsersControllers {
   async getAllUsers(req, res, next) {
@@ -16,8 +18,24 @@ class UsersControllers {
 
   async getUserById(req, res, next) {
     try {
-      const user_id = req.params.id;
-      const user = await UserServices.getUserById(user_id);
+      const user_id_from_param = req.params.id;
+      const user_id_from_token = req.user.id;
+
+      const user_from_param = await UserServices.getUserById(
+        user_id_from_param
+      );
+
+      const user_from_token = await UserServices.getUserById(
+        user_id_from_token
+      );
+
+      console.log(user_from_param);
+      console.log(user_from_token);
+
+      const user = await UserServices.getUserByIdWithRole(
+        user_from_param,
+        user_from_token
+      );
 
       res.success(200, "User found", { user: user });
     } catch (error) {
@@ -155,6 +173,22 @@ class UsersControllers {
       const deleted_user = await UserServices.deleteUserById(user_id);
 
       res.success(200, "User deleted", { user: deleted_user });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async upgradeUserRoleById(req, res, next) {
+    try {
+      const user_id_from_param = req.params.id;
+      const user_id_from_token = req.user.id;
+
+      const upgraded_user = await UserServices.upgradeUserById(
+        user_id_from_param,
+        user_id_from_token
+      );
+
+      res.success(201, "User role upgraded", { user: upgraded_user });
     } catch (error) {
       next(error);
     }
