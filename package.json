@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon server.js",
     "generate:doc": "swagger-cli bundle ./docs/swagger/index.yaml --outfile ./docs/swagger/index.json",
-    "test": "jest --coverage",
+    "test": "jest",
     "seed": "node ./prisma/seed.js"
   },
   "keywords": [],
@@ -28,6 +28,7 @@
     "uuid": "^10.0.0"
   },
   "devDependencies": {
+    "@faker-js/faker": "^8.4.1",
     "nodemon": "^3.1.4",
     "prisma": "^5.17.0",
     "swagger-cli": "^4.0.4"

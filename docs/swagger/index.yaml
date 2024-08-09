@@ -1,8 +1,8 @@
 openapi: 3.0.3
 info:
-  title: Binar Bank Challenge Chapter 4 API Documentation
+  title: Binar Bank Challenge Chapter 5 API Documentation
   description: >-
-    This is a part of Binar JavaScript Backend Bootcamp - FGA Batch 2 Challenge Chapter 4. 
+    This is a part of Binar JavaScript Backend Bootcamp - FGA Batch 2 Challenge Chapter 4 & 5. 
 
     The challenge is to build a _simple_ Bank System REST API where can handle basic CRUD (Create, Read, Update, dan Delete) operations.
 

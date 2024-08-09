@@ -1,4 +1,7 @@
 -- CreateEnum
+CREATE TYPE "Role" AS ENUM ('User', 'Admin', 'Superuser');
+
+-- CreateEnum
 CREATE TYPE "Identity_Type" AS ENUM ('KTP', 'KK', 'Passport');
 
 -- CreateEnum
@@ -8,9 +11,10 @@ CREATE TYPE "Gender" AS ENUM ('male', 'female');
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
     "first_name" TEXT NOT NULL,
-    "last_name" TEXT NOT NULL,
+    "last_name" TEXT,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
+    "role" "Role" NOT NULL DEFAULT 'User',
     "is_deleted" BOOLEAN NOT NULL DEFAULT false,
     "deleted_at" TIMESTAMP(3),
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -23,13 +27,13 @@ CREATE TABLE "User" (
 CREATE TABLE "Profile" (
     "id" TEXT NOT NULL,
     "user_id" TEXT NOT NULL,
-    "date_of_birth" TIMESTAMP(3) NOT NULL,
-    "gender" "Gender" NOT NULL,
-    "identity_type" "Identity_Type" NOT NULL,
-    "identity_number" TEXT NOT NULL,
-    "phone_number" TEXT NOT NULL,
-    "occupation" TEXT NOT NULL,
-    "nationality" TEXT NOT NULL,
+    "date_of_birth" DATE,
+    "gender" "Gender",
+    "identity_type" "Identity_Type",
+    "identity_number" TEXT,
+    "phone_number" TEXT,
+    "occupation" TEXT,
+    "nationality" TEXT,
 
     CONSTRAINT "Profile_pkey" PRIMARY KEY ("id")
 );
@@ -38,12 +42,12 @@ CREATE TABLE "Profile" (
 CREATE TABLE "Address" (
     "id" TEXT NOT NULL,
     "user_id" TEXT NOT NULL,
-    "street" TEXT NOT NULL,
+    "street" TEXT,
     "village" TEXT,
-    "zip_code" TEXT NOT NULL,
-    "city" TEXT NOT NULL,
-    "province" TEXT NOT NULL,
-    "country" TEXT NOT NULL,
+    "zip_code" TEXT,
+    "city" TEXT,
+    "province" TEXT,
+    "country" TEXT,
 
     CONSTRAINT "Address_pkey" PRIMARY KEY ("id")
 );
@@ -61,7 +65,7 @@ CREATE TABLE "Account_Types" (
 CREATE TABLE "Accounts" (
     "id" TEXT NOT NULL,
     "number" VARCHAR(12) NOT NULL,
-    "pin_number" VARCHAR(6) NOT NULL,
+    "pin_number" TEXT NOT NULL,
     "balance" DOUBLE PRECISION NOT NULL,
     "bank_name" TEXT NOT NULL,
     "user_id" TEXT NOT NULL,

@@ -7,7 +7,11 @@ const data = {
     "zyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImJjN2QyMGMzLWMzN2QtNGQyNy1hZjFjLTYxY2NkZTA4Yjc1YiIsImVtYWlsIjoiamhvbnRyaUBtYWlsLmNvbSIsImlhdCI6MTcyMzAyOTE3OCwiZXhwIjoxNzIzMDMyNzc4fQ.BuMeCv33zy3VseFUqbQRHdqbA2tDvWvr2pgdWOx2jFE",
   valid_user: {
     email: "jhontriboyke@example.com",
-    password: "123456!",
+    password: "123456",
+  },
+  valid_complete_user: {
+    email: "janedoe@example.com",
+    password: "123456",
   },
   valid_new_user: {
     first_name: "Alex",

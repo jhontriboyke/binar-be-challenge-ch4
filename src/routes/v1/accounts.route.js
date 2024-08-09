@@ -43,6 +43,5 @@ router.put(
 );
 
 /* DELETE an account by id */
-// router.delete("/:id", AccountController.deleteAccountById);
 
 module.exports = router;

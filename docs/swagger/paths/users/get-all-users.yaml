@@ -1,6 +1,8 @@
 tags:
   - user
 summary: Get all users
+security:
+  - Authorization: []
 description: Retrieve all existing users
 operationId: getAllUsers
 responses:
@@ -26,6 +28,25 @@ responses:
                     type: array
                     items:
                       $ref: "../../components/User.yaml"
+    application/json:
+      schema:
+        type: array
+        items:
+          type: object
+          properties:
+            status:
+              type: string
+              example: Success
+            message:
+              type: string
+              example: Data retrieved successfully!!
+            data:
+              type: object
+              properties:
+                users:
+                  type: array
+                  items:
+                    $ref: "../../components/User.yaml"
   "204":
     description: No content - there are no users available
     content:

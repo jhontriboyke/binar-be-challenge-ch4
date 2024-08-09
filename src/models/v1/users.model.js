@@ -4,6 +4,9 @@ const Role = require("../../_helpers/role");
 class UserModel {
   async getAllUsers() {
     return await prisma.user.findMany({
+      where: {
+        role: "User",
+      },
       select: {
         id: true,
         first_name: true,

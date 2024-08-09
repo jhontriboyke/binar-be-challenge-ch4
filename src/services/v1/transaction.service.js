@@ -33,6 +33,7 @@ class TransactionServices {
       const account_numbers = accounts.map((account) => account.number);
 
       return await TransactionsModel.getTransactionsByAccountNumbers(
+        queries,
         account_numbers
       );
     }

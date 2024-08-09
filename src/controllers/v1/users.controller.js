@@ -52,7 +52,12 @@ class UsersControllers {
 
   async updateUserById(req, res, next) {
     try {
-      const user_id = req.params.id;
+      const user_id_from_param = req.params.id;
+      const user_id_from_token = req.user.id;
+
+      if (user_id_from_param !== user_id_from_token) {
+        throw new UnauthorizedError("You cant access this resource", null);
+      }
 
       const {
         first_name,
@@ -101,7 +106,7 @@ class UsersControllers {
       };
 
       const updated_user = await UserServices.updateUserById(
-        user_id,
+        user_id_from_param,
         user_obj,
         profile_obj,
         address_obj
@@ -115,9 +120,16 @@ class UsersControllers {
 
   async deleteUserById(req, res, next) {
     try {
-      const user_id = req.params.id;
+      const user_id_from_param = req.params.id;
+      const user_id_from_token = req.user.id;
 
-      const deleted_user = await UserServices.deleteUserById(user_id);
+      if (user_id_from_param !== user_id_from_token) {
+        throw new UnauthorizedError("You cant access this resource", null);
+      }
+
+      const deleted_user = await UserServices.deleteUserById(
+        user_id_from_param
+      );
 
       res.success(200, "User deleted", { user: deleted_user });
     } catch (error) {

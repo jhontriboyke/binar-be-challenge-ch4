@@ -15,3 +15,8 @@ schemas:
     $ref: "./Account.yaml"
   AccountById:
     $ref: "./AccountById.yaml"
+securitySchemes:
+  Authorization:
+    type: http
+    scheme: bearer
+    bearerFormat: JWT

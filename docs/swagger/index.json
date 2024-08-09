@@ -1,8 +1,8 @@
 {
   "openapi": "3.0.3",
   "info": {
-    "title": "Binar Bank Challenge Chapter 4 API Documentation",
-    "description": "This is a part of Binar JavaScript Backend Bootcamp - FGA Batch 2 Challenge Chapter 4. \nThe challenge is to build a _simple_ Bank System REST API where can handle basic CRUD (Create, Read, Update, dan Delete) operations.\n\nThe REST API for now only supported on your localhost server, please provide and define your .env file.\n\n**Documentation will update accordingly**.\n\nBelow are the detailed information on how to use the API, including all endpoints to use, request methods, and example responses.\n\n\n\nSome useful link(s):\n- [Binar BE Challenge CH4 Repository](https://github.com/jhontriboyke/binar-be-challenge-ch4)",
+    "title": "Binar Bank Challenge Chapter 5 API Documentation",
+    "description": "This is a part of Binar JavaScript Backend Bootcamp - FGA Batch 2 Challenge Chapter 4 & 5. \nThe challenge is to build a _simple_ Bank System REST API where can handle basic CRUD (Create, Read, Update, dan Delete) operations.\n\nThe REST API for now only supported on your localhost server, please provide and define your .env file.\n\n**Documentation will update accordingly**.\n\nBelow are the detailed information on how to use the API, including all endpoints to use, request methods, and example responses.\n\n\n\nSome useful link(s):\n- [Binar BE Challenge CH4 Repository](https://github.com/jhontriboyke/binar-be-challenge-ch4)",
     "contact": {
       "email": "jhontriboyke@gmail.com"
     },
@@ -34,6 +34,11 @@
           "user"
         ],
         "summary": "Get all users",
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
         "description": "Retrieve all existing users",
         "operationId": "getAllUsers",
         "responses": {
@@ -62,6 +67,35 @@
                             "items": {
                               "$ref": "#/components/schemas/User"
                             }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Data retrieved successfully!!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "users": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/User"
                           }
                         }
                       }
@@ -695,6 +729,13 @@
             "$ref": "#/components/schemas/User"
           }
         }
+      }
+    },
+    "securitySchemes": {
+      "Authorization": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   }

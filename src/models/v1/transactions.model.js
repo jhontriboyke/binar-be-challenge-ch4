@@ -8,9 +8,10 @@ class TransactionsModel {
     });
   }
 
-  async getTransactionsByAccountNumbers(arr_numbers) {
+  async getTransactionsByAccountNumbers(queries, arr_numbers) {
     return await prisma.transaction.findMany({
       where: {
+        type: queries.type,
         OR: [
           {
             from_account_number: {
@@ -24,6 +25,7 @@ class TransactionsModel {
           },
         ],
       },
+      orderBy: queries.orderBy,
     });
   }
 
