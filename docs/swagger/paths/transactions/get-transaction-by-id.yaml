@@ -1,0 +1,72 @@
+tags:
+  - transaction
+summary: Get an transaction by id
+security:
+  - Authorization: []
+description: Retrieve an transaction by transaction id as parameter
+parameters:
+  - name: transactionId
+    in: path
+    description: ID of transaction
+    required: true
+    schema:
+      type: string
+      format: uuid
+      example: 764e40d6-696a-47e1-8ae7-c233142b732e
+responses:
+  "200 Admin":
+    description: Transaction details found
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: string
+              example: success
+            message:
+              type: string
+              example: Transaction found
+            data:
+              type: object
+              properties:
+                transaction:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      format: uuid
+                      example: a76e8be3-15d0-49a0-95cd-c23ad7c96eea
+                    type:
+                      type: string
+                      example: deposit
+                    amount:
+                      type: integer
+                      example: 4000
+                    date:
+                      type: string
+                      format: date-time
+                      example: 2024-08-09T10:10:47.713Z
+                    from_account:
+                      type: string
+                      nullable: true
+                      example: null
+                    to_account:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                          example: 52a26eac-8ed3-4834-92da-9c4d8478c2a1
+                        number:
+                          type: string
+                          example: 112233445566
+                        user:
+                          type: object
+                          properties:
+                            first_name:
+                              type: string
+                              example: Jhontri
+                            last_name:
+                              type: string
+                              example: Boyke

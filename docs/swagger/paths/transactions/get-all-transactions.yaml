@@ -1,0 +1,72 @@
+tags:
+  - transaction
+summary: Get all transactions
+security:
+  - Authorization: []
+description: Retrieve all existing transactions
+operationId: getAllTransactions
+responses:
+  "200 Admin":
+    description: Transactions retrieved successfully
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: string
+              example: success
+            message:
+              type: string
+              example: Data retrieved successfully
+            data:
+              type: object
+              properties:
+                transactions:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: a76e8be3-15d0-49a0-95cd-c23ad7c96eea
+                      amount:
+                        type: integer
+                        example: 4000
+                      date:
+                        type: string
+                        format: date-time
+                        example: 2024-08-09T10:10:47.713Z
+                      from_account_number:
+                        type: string
+                        nullable: true
+                        example: null
+                      to_account_number:
+                        type: string
+                        example: 112233445566
+                      type:
+                        type: string
+                        example: deposit
+  "200 User":
+    description: Get all transactions by User access role
+    content:
+      application/json:
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+              status:
+                type: string
+                example: Success
+              message:
+                type: string
+                example: Data retrieved successfully!!
+              data:
+                type: object
+                properties:
+                  transactions:
+                    type: array
+                    items:
+                      $ref: "../../components/Transactions-admin.yaml"

@@ -1,0 +1,27 @@
+type: object
+properties:
+  id:
+    type: string
+    example: 28c3b9a3-c5fa-411c-b8d3-d2f0c6571c21
+  identity_number:
+    type: string
+    example: null
+  identity_type:
+    type: string
+    default: null
+    enum:
+      - KTP
+      - KK
+      - Passport
+  phone_number:
+    type: string
+    example: null
+  nationality:
+    type: string
+    example: null
+  job:
+    type: string
+    example: null
+  user_id:
+    type: string
+    example: effee1ce-cd7d-4719-83f4-6cf18d97ad3b

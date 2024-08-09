@@ -1,0 +1,20 @@
+type: object
+properties:
+  id:
+    type: string
+    example: a76e8be3-15d0-49a0-95cd-c23ad7c96eea
+  amount:
+    type: int
+    example: 4000
+  date:
+    type: string
+    example: "2024-08-09T10:10:47.713Z"
+  from_account_number:
+    type: string
+    example: "null"
+  to_account_number:
+    type: string
+    example: "112233445566"
+  type:
+    type: string
+    example: deposit

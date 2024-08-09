@@ -1,0 +1,17 @@
+type: object
+properties:
+  account_type_id:
+    type: integer
+    example: 1
+  bank_name:
+    type: string
+    example: Binar
+  number:
+    type: string
+    example: "112233445566"
+  pin_number:
+    type: string
+    example: "112233"
+  balance:
+    type: integer
+    example: 15000

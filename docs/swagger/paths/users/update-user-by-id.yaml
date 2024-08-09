@@ -1,0 +1,196 @@
+tags:
+  - user
+security:
+  - Authorization: []
+summary: Update a  user
+description: Update a user by it's id
+operationId: updateUser
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          first_name:
+            type: string
+            example: Jane
+          last_name:
+            type: string
+            example: Doe
+          email:
+            type: string
+            format: email
+            example: janedoe@example.com
+          password:
+            type: string
+            format: password
+            example: 123456
+          date_of_birth:
+            type: string
+            format: date
+            example: 2000-04-11
+          gender:
+            type: string
+            example: female
+          identity_type:
+            type: string
+            example: KTP
+          identity_number:
+            type: string
+            example: 1234567842344460
+          phone_number:
+            type: string
+            example: 081234454391
+          occupation:
+            type: string
+            example: Web Developer
+          nationality:
+            type: string
+            example: Indonesian
+          street:
+            type: string
+            example: Patih Rumbih
+          zip_code:
+            type: string
+            example: 119021
+          city:
+            type: string
+            example: Jakarta
+          province:
+            type: string
+            example: DKI Jakarta
+          country:
+            type: string
+            example: Indonesia
+parameters:
+  - name: userId
+    in: path
+    description: ID of user
+    required: true
+    schema:
+      type: string
+      format: uuid
+      example: effee1ce-cd7d-4719-83f4-6cf18d97ad3b
+responses:
+  "200":
+    description: User updated successfully
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: string
+              example: success
+            message:
+              type: string
+              example: User updated
+            data:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      format: uuid
+                      example: d5ede91e-ed49-44e0-863a-4bdf921dbc04
+                    first_name:
+                      type: string
+                      example: Jane
+                    last_name:
+                      type: string
+                      example: Doe
+                    email:
+                      type: string
+                      format: email
+                      example: janedoe@example.com
+                    role:
+                      type: string
+                      example: User
+                    profile:
+                      type: object
+                      properties:
+                        phone_number:
+                          type: string
+                          example: 081234454391
+                        identity_type:
+                          type: string
+                          example: KTP
+                        identity_number:
+                          type: string
+                          example: 1234567842344460
+                        gender:
+                          type: string
+                          example: female
+                    addresses:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          street:
+                            type: string
+                            example: Patih Rumbih
+                          village:
+                            type: string
+                            nullable: true
+                            example: null
+                          zip_code:
+                            type: string
+                            example: 119021
+                          city:
+                            type: string
+                            example: Jakarta
+                          province:
+                            type: string
+                            example: DKI Jakarta
+                          country:
+                            type: string
+                            example: Indonesia
+  "400":
+    description: Validation error
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: string
+              example: fail
+            message:
+              type: string
+              example: Validation error
+            status_code:
+              type: integer
+              example: 400
+            data:
+              type: array
+              items:
+                type: object
+                properties:
+                  property:
+                    type: string
+                    example: identity_type
+                  message:
+                    type: string
+                    example: Please provide valid identity type (KTP, KK, or Passport)
+  "403":
+    description: Access forbidden
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: string
+              example: error
+            message:
+              type: string
+              example: You can't access this resource
+            status_code:
+              type: integer
+              example: 403
+            data:
+              type: object
+              example: {}

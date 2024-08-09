@@ -1,0 +1,23 @@
+type: object
+properties:
+  id:
+    type: string
+    example: effee1ce-cd7d-4719-83f4-6cf18d97ad3b
+  number:
+    type: string
+    example: "112233445566"
+  pin_number:
+    type: string
+    example: "112233"
+  balance:
+    type: integer
+    example: 15000
+  bank_name:
+    type: string
+    example: Binar
+  user_id:
+    type: string
+    example: db8934e8-298e-4b44-b2a9-d00ed7af8482
+  account_type_id:
+    type: integer
+    example: 1

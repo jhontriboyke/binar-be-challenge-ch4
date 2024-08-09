@@ -1,10 +1,12 @@
 tags:
   - account
 summary: Get all accounts
+security:
+  - Authorization: []
 description: Retrieve all existing accounts
 operationId: getAllAccounts
 responses:
-  "200":
+  "200 Admin":
     description: Data retrieved successfully
     content:
       application/json:
@@ -25,9 +27,28 @@ responses:
                   accounts:
                     type: array
                     items:
-                      $ref: "../../components/Account.yaml"
-  "204":
-    description: No content - there are no users available
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: 764e40d6-696a-47e1-8ae7-c233142b732e
+                        number:
+                          type: string
+                          example: 333211236951
+                        balance:
+                          type: float
+                          example: 10000000
+                        bank_name:
+                          type: string
+                          example: Bank Binar
+                        account_type:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                              example: Basic
+  "200 User":
+    description: Data retrieved successfully
     content:
       application/json:
         schema:
@@ -40,7 +61,7 @@ responses:
                 example: Success
               message:
                 type: string
-                example: No accounts data available
+                example: Data retrieved successfully!!
               data:
                 type: object
                 properties:
@@ -49,3 +70,42 @@ responses:
                     items:
                       type: object
                       properties:
+                        id:
+                          type: string
+                          example: 764e40d6-696a-47e1-8ae7-c233142b732e
+                        number:
+                          type: string
+                          example: 333211236951
+                        pin_number:
+                          type: string
+                          example: $2b$10$lwy7kPuHEfEOiRbl2sAB.OTvgZlRqQ5U/atp9/7yGsTVWxj2gUPdS
+                        balance:
+                          type: float
+                          example: 10000000
+                        bank_name:
+                          type: string
+                          example: Bank Binar
+                        account_type_id:
+                          type: integer
+                          example: 1
+  "200 User (empty)":
+    description: If user did not have any accounts
+    content:
+      application/json:
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+              status:
+                type: string
+                example: Success
+              message:
+                type: string
+                example: Accounts data are empty
+              data:
+                type: object
+                properties:
+                  accounts:
+                    type: array
+                    items:

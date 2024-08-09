@@ -6,7 +6,7 @@ security:
 description: Retrieve all existing users
 operationId: getAllUsers
 responses:
-  "200":
+  "200 Admin":
     description: Data retrieved successfully
     content:
       application/json:
@@ -47,26 +47,22 @@ responses:
                   type: array
                   items:
                     $ref: "../../components/User.yaml"
-  "204":
-    description: No content - there are no users available
+  "403 User":
+    description: Access denied
     content:
       application/json:
         schema:
-          type: array
-          items:
-            type: object
-            properties:
-              status:
-                type: string
-                example: Success
-              message:
-                type: string
-                example: No users data available
-              data:
-                type: object
-                properties:
-                  users:
-                    type: array
-                    items:
-                      type: object
-                      properties:
+          type: object
+          properties:
+            status:
+              type: string
+              example: error
+            message:
+              type: string
+              example: You do not have permission to access this resource
+            status_code:
+              type: integer
+              example: 403
+            data:
+              type: object
+              properties:

@@ -1,0 +1,34 @@
+tags:
+  - transaction
+summary: Create transfer transaction
+security:
+  - Authorization: []
+description: Create transfer transaction
+operationId: createTransferTransaction
+requestBody:
+  description: Create a new transfer transaction by passing request body
+  content:
+    application/json:
+      schema:
+        $ref: "../../components/CreateTransfer-body.yaml"
+responses:
+  "201 User":
+    description: Create transfer transaction by User access role
+    content:
+      application/json:
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+              status:
+                type: string
+                example: Success
+              message:
+                type: string
+                example: Transfer success and created
+              data:
+                type: object
+                properties:
+                  transactions:
+                    $ref: "../../components/CreateTransfer-res.yaml"

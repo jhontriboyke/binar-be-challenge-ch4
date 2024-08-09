@@ -1,6 +1,8 @@
 tags:
   - user
 summary: Get an user by id
+security:
+  - Authorization: []
 description: Retrieve an user by user id as parameter
 parameters:
   - name: userId
@@ -12,8 +14,26 @@ parameters:
       format: uuid
       example: effee1ce-cd7d-4719-83f4-6cf18d97ad3b
 responses:
-  "200":
-    description: Data retrieved successfully
+  "200 Admin":
+    description: Access by admin
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: string
+              example: Success
+            message:
+              type: string
+              example: User found
+            data:
+              type: object
+              properties:
+                user:
+                  $ref: "../../components/UserById-admin.yaml"
+  "200 User":
+    description: Access by it's user
     content:
       application/json:
         schema:
@@ -30,7 +50,12 @@ responses:
               properties:
                 user:
                   $ref: "../../components/UserById.yaml"
-
+  "403 User":
+    description: When user access another user detail
+    content:
+      application/json:
+        schema:
+          $ref: "../../components/403Status.yaml"
   "404":
     description: Data did not found
     content:

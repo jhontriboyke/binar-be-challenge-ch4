@@ -1,0 +1,18 @@
+type: object
+properties:
+  id:
+    type: string
+    example: 764e40d6-696a-47e1-8ae7-c233142b732e
+  bank_name:
+    type: string
+    example: Bank Binar
+  number:
+    type: string
+    example: 333211236951
+  balance:
+    type: float
+    example: 10000000
+  account_type:
+    $ref: "./Account_Type.yaml"
+  user:
+    $ref: "./User.yaml"

@@ -1,6 +1,8 @@
 tags:
   - account
 summary: Get an account by id
+security:
+  - Authorization: []
 description: Retrieve an account by account id as parameter
 parameters:
   - name: accountId
@@ -12,8 +14,26 @@ parameters:
       format: uuid
       example: 764e40d6-696a-47e1-8ae7-c233142b732e
 responses:
-  "200":
-    description: Account retrieved successfully
+  "200 Admin":
+    description: Retrieve all accounts by Admin role
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: string
+              example: Success
+            message:
+              type: string
+              example: Account found
+            data:
+              type: object
+              properties:
+                account:
+                  $ref: "../../components/AccountById-admin.yaml"
+  "200 User":
+    description: Retrieve all accounts by User role
     content:
       application/json:
         schema:

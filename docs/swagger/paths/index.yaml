@@ -7,11 +7,32 @@
 /users/{id}:
   get:
     $ref: "./users/get-user-by-id.yaml"
+  put:
+    $ref: "./users/update-user-by-id.yaml"
 
 # Account API Endpoints
 /accounts:
   get:
     $ref: "./accounts/get-all-accounts.yaml"
+  post:
+    $ref: "./accounts/post-new-account.yaml"
 /accounts/{id}:
   get:
     $ref: "./accounts/get-account-by-id.yaml"
+
+# Transaction API Endpoints
+/transactions:
+  get:
+    $ref: "./transactions/get-all-transactions.yaml"
+/transactions/{id}:
+  get:
+    $ref: "./transactions/get-transaction-by-id.yaml"
+/transactions/deposit:
+  post:
+    $ref: "./transactions/create-deposit.yaml"
+/transactions/withdraw:
+  post:
+    $ref: "./transactions/create-withdraw.yaml"
+/transactions/transfer:
+  post:
+    $ref: "./transactions/create-transfer.yaml"

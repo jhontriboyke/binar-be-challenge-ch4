@@ -1,0 +1,8 @@
+type: object
+properties:
+  to_account_number:
+    type: string
+    example: "112233445566"
+  amount:
+    type: integer
+    example: 15000

@@ -1,17 +1,19 @@
 tags:
-  - user
-summary: Create a new user
-description: Add a new user
-operationId: createUser
+  - account
+summary: Create a new account
+security:
+  - Authorization: []
+description: Add a new account
+operationId: createAccount
 requestBody:
-  description: Create a new user by passing request body
+  description: Create a new account by passing request body
   content:
     application/json:
       schema:
-        $ref: "../../components/CreateUser.yaml"
+        $ref: "../../components/CreateAccount.yaml"
 responses:
   "201":
-    description: User created successfully
+    description: Account created
     content:
       application/json:
         schema:
@@ -22,12 +24,12 @@ responses:
               example: Success
             message:
               type: string
-              example: User created
+              example: Account created
             data:
               type: object
               properties:
                 user:
-                  $ref: "../../components/NewUser.yaml"
+                  $ref: "../../components/NewAccount.yaml"
   "400":
     description: Invalid input
     content:
@@ -41,6 +43,9 @@ responses:
             message:
               type: string
               example: Validation failed
+            status_code:
+              type: integer
+              example: 404
             data:
               type: array
               items:
@@ -48,7 +53,7 @@ responses:
                 properties:
                   property:
                     type: string
-                    example: "street"
+                    example: "balance"
                   message:
                     type: string
-                    example: Street name is required
+                    example: Balance should more than 0

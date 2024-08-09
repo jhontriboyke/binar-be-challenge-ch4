@@ -1,0 +1,26 @@
+type: object
+properties:
+  id:
+    type: string
+    example: c2c31e1c-e246-450f-b79c-75835ead8660
+  street:
+    type: string
+    example: null
+  village:
+    type: string
+    example: null
+  postal_code:
+    type: string
+    example: null
+  city:
+    type: string
+    example: null
+  province:
+    type: string
+    example: null
+  country:
+    type: string
+    example: null
+  user_id:
+    type: string
+    example: effee1ce-cd7d-4719-83f4-6cf18d97ad3b

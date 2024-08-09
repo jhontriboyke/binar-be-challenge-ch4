@@ -42,7 +42,7 @@
         "description": "Retrieve all existing users",
         "operationId": "getAllUsers",
         "responses": {
-          "200": {
+          "200 Admin": {
             "description": "Data retrieved successfully",
             "content": {
               "application/json": {
@@ -105,35 +105,28 @@
               }
             }
           },
-          "204": {
-            "description": "No content - there are no users available",
+          "403 User": {
+            "description": "Access denied",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "status": {
-                        "type": "string",
-                        "example": "Success"
-                      },
-                      "message": {
-                        "type": "string",
-                        "example": "No users data available"
-                      },
-                      "data": {
-                        "type": "object",
-                        "properties": {
-                          "users": {
-                            "type": "array",
-                            "items": {
-                              "type": "object",
-                              "properties": null
-                            }
-                          }
-                        }
-                      }
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "You do not have permission to access this resource"
+                    },
+                    "status_code": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": null
                     }
                   }
                 }
@@ -179,7 +172,100 @@
                       "type": "object",
                       "properties": {
                         "user": {
-                          "$ref": "#/components/schemas/UserById"
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "example": "effee1ce-cd7d-4719-83f4-6cf18d97ad3b"
+                            },
+                            "first_name": {
+                              "type": "string",
+                              "example": "Doe"
+                            },
+                            "last_name": {
+                              "type": "string",
+                              "example": "Doe"
+                            },
+                            "email": {
+                              "type": "string",
+                              "example": "johndoe@mail.com"
+                            },
+                            "profile": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string",
+                                  "example": "28c3b9a3-c5fa-411c-b8d3-d2f0c6571c21"
+                                },
+                                "identity_number": {
+                                  "type": "string",
+                                  "example": null
+                                },
+                                "identity_type": {
+                                  "type": "string",
+                                  "default": null,
+                                  "enum": [
+                                    "KTP",
+                                    "KK",
+                                    "Passport"
+                                  ]
+                                },
+                                "phone_number": {
+                                  "type": "string",
+                                  "example": null
+                                },
+                                "nationality": {
+                                  "type": "string",
+                                  "example": null
+                                },
+                                "job": {
+                                  "type": "string",
+                                  "example": null
+                                },
+                                "user_id": {
+                                  "type": "string",
+                                  "example": "effee1ce-cd7d-4719-83f4-6cf18d97ad3b"
+                                }
+                              }
+                            },
+                            "address": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string",
+                                  "example": "c2c31e1c-e246-450f-b79c-75835ead8660"
+                                },
+                                "street": {
+                                  "type": "string",
+                                  "example": null
+                                },
+                                "village": {
+                                  "type": "string",
+                                  "example": null
+                                },
+                                "postal_code": {
+                                  "type": "string",
+                                  "example": null
+                                },
+                                "city": {
+                                  "type": "string",
+                                  "example": null
+                                },
+                                "province": {
+                                  "type": "string",
+                                  "example": null
+                                },
+                                "country": {
+                                  "type": "string",
+                                  "example": null
+                                },
+                                "user_id": {
+                                  "type": "string",
+                                  "example": "effee1ce-cd7d-4719-83f4-6cf18d97ad3b"
+                                }
+                              }
+                            }
+                          }
                         }
                       }
                     }
@@ -233,6 +319,11 @@
           "user"
         ],
         "summary": "Get an user by id",
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
         "description": "Retrieve an user by user id as parameter",
         "parameters": [
           {
@@ -248,34 +339,6 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "Data retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "example": "Success"
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "User found"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "user": {
-                          "$ref": "#/components/schemas/UserById"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
           "404": {
             "description": "Data did not found",
             "content": {
@@ -304,6 +367,389 @@
                 }
               }
             }
+          },
+          "200 Admin": {
+            "description": "Access by admin",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User found"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "example": "effee1ce-cd7d-4719-83f4-6cf18d97ad3b"
+                            },
+                            "first_name": {
+                              "type": "string",
+                              "example": "Doe"
+                            },
+                            "last_name": {
+                              "type": "string",
+                              "example": "Doe"
+                            },
+                            "email": {
+                              "type": "string",
+                              "example": "johndoe@mail.com"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200 User": {
+            "description": "Access by it's user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User found"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user": {
+                          "$ref": "#/components/schemas/UserById"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403 User": {
+            "description": "When user access another user detail",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "You cannot access this resource"
+                    },
+                    "status_code": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": null
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "user"
+        ],
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "summary": "Update a  user",
+        "description": "Update a user by it's id",
+        "operationId": "updateUser",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "first_name": {
+                    "type": "string",
+                    "example": "Jane"
+                  },
+                  "last_name": {
+                    "type": "string",
+                    "example": "Doe"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "janedoe@example.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "format": "password",
+                    "example": 123456
+                  },
+                  "date_of_birth": {
+                    "type": "string",
+                    "format": "date",
+                    "example": "2000-04-11T00:00:00.000Z"
+                  },
+                  "gender": {
+                    "type": "string",
+                    "example": "female"
+                  },
+                  "identity_type": {
+                    "type": "string",
+                    "example": "KTP"
+                  },
+                  "identity_number": {
+                    "type": "string",
+                    "example": 1234567842344460
+                  },
+                  "phone_number": {
+                    "type": "string",
+                    "example": "081234454391"
+                  },
+                  "occupation": {
+                    "type": "string",
+                    "example": "Web Developer"
+                  },
+                  "nationality": {
+                    "type": "string",
+                    "example": "Indonesian"
+                  },
+                  "street": {
+                    "type": "string",
+                    "example": "Patih Rumbih"
+                  },
+                  "zip_code": {
+                    "type": "string",
+                    "example": 119021
+                  },
+                  "city": {
+                    "type": "string",
+                    "example": "Jakarta"
+                  },
+                  "province": {
+                    "type": "string",
+                    "example": "DKI Jakarta"
+                  },
+                  "country": {
+                    "type": "string",
+                    "example": "Indonesia"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "ID of user",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "effee1ce-cd7d-4719-83f4-6cf18d97ad3b"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User updated"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "format": "uuid",
+                              "example": "d5ede91e-ed49-44e0-863a-4bdf921dbc04"
+                            },
+                            "first_name": {
+                              "type": "string",
+                              "example": "Jane"
+                            },
+                            "last_name": {
+                              "type": "string",
+                              "example": "Doe"
+                            },
+                            "email": {
+                              "type": "string",
+                              "format": "email",
+                              "example": "janedoe@example.com"
+                            },
+                            "role": {
+                              "type": "string",
+                              "example": "User"
+                            },
+                            "profile": {
+                              "type": "object",
+                              "properties": {
+                                "phone_number": {
+                                  "type": "string",
+                                  "example": "081234454391"
+                                },
+                                "identity_type": {
+                                  "type": "string",
+                                  "example": "KTP"
+                                },
+                                "identity_number": {
+                                  "type": "string",
+                                  "example": 1234567842344460
+                                },
+                                "gender": {
+                                  "type": "string",
+                                  "example": "female"
+                                }
+                              }
+                            },
+                            "addresses": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "street": {
+                                    "type": "string",
+                                    "example": "Patih Rumbih"
+                                  },
+                                  "village": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "example": null
+                                  },
+                                  "zip_code": {
+                                    "type": "string",
+                                    "example": 119021
+                                  },
+                                  "city": {
+                                    "type": "string",
+                                    "example": "Jakarta"
+                                  },
+                                  "province": {
+                                    "type": "string",
+                                    "example": "DKI Jakarta"
+                                  },
+                                  "country": {
+                                    "type": "string",
+                                    "example": "Indonesia"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "fail"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Validation error"
+                    },
+                    "status_code": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "property": {
+                            "type": "string",
+                            "example": "identity_type"
+                          },
+                          "message": {
+                            "type": "string",
+                            "example": "Please provide valid identity type (KTP, KK, or Passport)"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "You can't access this resource"
+                    },
+                    "status_code": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "data": {
+                      "type": "object",
+                      "example": {}
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -314,10 +760,15 @@
           "account"
         ],
         "summary": "Get all accounts",
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
         "description": "Retrieve all existing accounts",
         "operationId": "getAllAccounts",
         "responses": {
-          "200": {
+          "200 Admin": {
             "description": "Data retrieved successfully",
             "content": {
               "application/json": {
@@ -340,7 +791,34 @@
                           "accounts": {
                             "type": "array",
                             "items": {
-                              "$ref": "#/components/schemas/Account"
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string",
+                                  "example": "764e40d6-696a-47e1-8ae7-c233142b732e"
+                                },
+                                "number": {
+                                  "type": "string",
+                                  "example": 333211236951
+                                },
+                                "balance": {
+                                  "type": "float",
+                                  "example": 10000000
+                                },
+                                "bank_name": {
+                                  "type": "string",
+                                  "example": "Bank Binar"
+                                },
+                                "account_type": {
+                                  "type": "object",
+                                  "properties": {
+                                    "name": {
+                                      "type": "string",
+                                      "example": "Basic"
+                                    }
+                                  }
+                                }
+                              }
                             }
                           }
                         }
@@ -351,8 +829,8 @@
               }
             }
           },
-          "204": {
-            "description": "No content - there are no users available",
+          "200 User": {
+            "description": "Data retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -366,7 +844,7 @@
                       },
                       "message": {
                         "type": "string",
-                        "example": "No accounts data available"
+                        "example": "Data retrieved successfully!!"
                       },
                       "data": {
                         "type": "object",
@@ -375,8 +853,210 @@
                             "type": "array",
                             "items": {
                               "type": "object",
-                              "properties": null
+                              "properties": {
+                                "id": {
+                                  "type": "string",
+                                  "example": "764e40d6-696a-47e1-8ae7-c233142b732e"
+                                },
+                                "number": {
+                                  "type": "string",
+                                  "example": 333211236951
+                                },
+                                "pin_number": {
+                                  "type": "string",
+                                  "example": "$2b$10$lwy7kPuHEfEOiRbl2sAB.OTvgZlRqQ5U/atp9/7yGsTVWxj2gUPdS"
+                                },
+                                "balance": {
+                                  "type": "float",
+                                  "example": 10000000
+                                },
+                                "bank_name": {
+                                  "type": "string",
+                                  "example": "Bank Binar"
+                                },
+                                "account_type_id": {
+                                  "type": "integer",
+                                  "example": 1
+                                }
+                              }
                             }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200 User (empty)": {
+            "description": "If user did not have any accounts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "Success"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "Accounts data are empty"
+                      },
+                      "data": {
+                        "type": "object",
+                        "properties": {
+                          "accounts": {
+                            "type": "array",
+                            "items": null
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "account"
+        ],
+        "summary": "Create a new account",
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "description": "Add a new account",
+        "operationId": "createAccount",
+        "requestBody": {
+          "description": "Create a new account by passing request body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "account_type_id": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "bank_name": {
+                    "type": "string",
+                    "example": "Binar"
+                  },
+                  "number": {
+                    "type": "string",
+                    "example": "112233445566"
+                  },
+                  "pin_number": {
+                    "type": "string",
+                    "example": "112233"
+                  },
+                  "balance": {
+                    "type": "integer",
+                    "example": 15000
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Account created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Account created"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "example": "effee1ce-cd7d-4719-83f4-6cf18d97ad3b"
+                            },
+                            "number": {
+                              "type": "string",
+                              "example": "112233445566"
+                            },
+                            "pin_number": {
+                              "type": "string",
+                              "example": "112233"
+                            },
+                            "balance": {
+                              "type": "integer",
+                              "example": 15000
+                            },
+                            "bank_name": {
+                              "type": "string",
+                              "example": "Binar"
+                            },
+                            "user_id": {
+                              "type": "string",
+                              "example": "db8934e8-298e-4b44-b2a9-d00ed7af8482"
+                            },
+                            "account_type_id": {
+                              "type": "integer",
+                              "example": 1
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "fail"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Validation failed"
+                    },
+                    "status_code": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "property": {
+                            "type": "string",
+                            "example": "balance"
+                          },
+                          "message": {
+                            "type": "string",
+                            "example": "Balance should more than 0"
                           }
                         }
                       }
@@ -395,6 +1075,11 @@
           "account"
         ],
         "summary": "Get an account by id",
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
         "description": "Retrieve an account by account id as parameter",
         "parameters": [
           {
@@ -410,8 +1095,89 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "Account retrieved successfully",
+          "404": {
+            "description": "Data did not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Account not found"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "account_id": {
+                          "type": "string",
+                          "example": "effee1ce-cd7d-4719-83f4-6cf18d97ad3b"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200 Admin": {
+            "description": "Retrieve all accounts by Admin role",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Account found"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "account": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "example": "764e40d6-696a-47e1-8ae7-c233142b732e"
+                            },
+                            "bank_name": {
+                              "type": "string",
+                              "example": "Bank Binar"
+                            },
+                            "number": {
+                              "type": "string",
+                              "example": 333211236951
+                            },
+                            "balance": {
+                              "type": "float",
+                              "example": 10000000
+                            },
+                            "account_type": {
+                              "$ref": "#/components/schemas/Account_Type"
+                            },
+                            "user": {
+                              "$ref": "#/components/schemas/User"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200 User": {
+            "description": "Retrieve all accounts by User role",
             "content": {
               "application/json": {
                 "schema": {
@@ -437,9 +1203,26 @@
                 }
               }
             }
-          },
-          "404": {
-            "description": "Data did not found",
+          }
+        }
+      }
+    },
+    "/transactions": {
+      "get": {
+        "tags": [
+          "transaction"
+        ],
+        "summary": "Get all transactions",
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "description": "Retrieve all existing transactions",
+        "operationId": "getAllTransactions",
+        "responses": {
+          "200 Admin": {
+            "description": "Transactions retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -447,18 +1230,504 @@
                   "properties": {
                     "status": {
                       "type": "string",
-                      "example": "Failed"
+                      "example": "success"
                     },
                     "message": {
                       "type": "string",
-                      "example": "Account not found"
+                      "example": "Data retrieved successfully"
                     },
                     "data": {
                       "type": "object",
                       "properties": {
-                        "account_id": {
-                          "type": "string",
-                          "example": "effee1ce-cd7d-4719-83f4-6cf18d97ad3b"
+                        "transactions": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "format": "uuid",
+                                "example": "a76e8be3-15d0-49a0-95cd-c23ad7c96eea"
+                              },
+                              "amount": {
+                                "type": "integer",
+                                "example": 4000
+                              },
+                              "date": {
+                                "type": "string",
+                                "format": "date-time",
+                                "example": "2024-08-09T10:10:47.713Z"
+                              },
+                              "from_account_number": {
+                                "type": "string",
+                                "nullable": true,
+                                "example": null
+                              },
+                              "to_account_number": {
+                                "type": "string",
+                                "example": 112233445566
+                              },
+                              "type": {
+                                "type": "string",
+                                "example": "deposit"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200 User": {
+            "description": "Get all transactions by User access role",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "Success"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "Data retrieved successfully!!"
+                      },
+                      "data": {
+                        "type": "object",
+                        "properties": {
+                          "transactions": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string",
+                                  "example": "a76e8be3-15d0-49a0-95cd-c23ad7c96eea"
+                                },
+                                "amount": {
+                                  "type": "int",
+                                  "example": 4000
+                                },
+                                "date": {
+                                  "type": "string",
+                                  "example": "2024-08-09T10:10:47.713Z"
+                                },
+                                "from_account_number": {
+                                  "type": "string",
+                                  "example": "null"
+                                },
+                                "to_account_number": {
+                                  "type": "string",
+                                  "example": "112233445566"
+                                },
+                                "type": {
+                                  "type": "string",
+                                  "example": "deposit"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/transactions/{id}": {
+      "get": {
+        "tags": [
+          "transaction"
+        ],
+        "summary": "Get an transaction by id",
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "description": "Retrieve an transaction by transaction id as parameter",
+        "parameters": [
+          {
+            "name": "transactionId",
+            "in": "path",
+            "description": "ID of transaction",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "764e40d6-696a-47e1-8ae7-c233142b732e"
+            }
+          }
+        ],
+        "responses": {
+          "200 Admin": {
+            "description": "Transaction details found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Transaction found"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "transaction": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "format": "uuid",
+                              "example": "a76e8be3-15d0-49a0-95cd-c23ad7c96eea"
+                            },
+                            "type": {
+                              "type": "string",
+                              "example": "deposit"
+                            },
+                            "amount": {
+                              "type": "integer",
+                              "example": 4000
+                            },
+                            "date": {
+                              "type": "string",
+                              "format": "date-time",
+                              "example": "2024-08-09T10:10:47.713Z"
+                            },
+                            "from_account": {
+                              "type": "string",
+                              "nullable": true,
+                              "example": null
+                            },
+                            "to_account": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string",
+                                  "format": "uuid",
+                                  "example": "52a26eac-8ed3-4834-92da-9c4d8478c2a1"
+                                },
+                                "number": {
+                                  "type": "string",
+                                  "example": 112233445566
+                                },
+                                "user": {
+                                  "type": "object",
+                                  "properties": {
+                                    "first_name": {
+                                      "type": "string",
+                                      "example": "Jhontri"
+                                    },
+                                    "last_name": {
+                                      "type": "string",
+                                      "example": "Boyke"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/transactions/deposit": {
+      "post": {
+        "tags": [
+          "transaction"
+        ],
+        "summary": "Create deposit transaction",
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "description": "Create deposit transaction",
+        "operationId": "createDepositTransaction",
+        "requestBody": {
+          "description": "Create a new deposit transaction by passing request body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "to_account_number": {
+                    "type": "string",
+                    "example": "112233445566"
+                  },
+                  "amount": {
+                    "type": "integer",
+                    "example": 15000
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201 User": {
+            "description": "Create deposit transaction by User access role",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "Success"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "Deposit success and created"
+                      },
+                      "data": {
+                        "type": "object",
+                        "properties": {
+                          "transactions": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "example": "2d538c00-48e9-424b-a652-d2d11706640f"
+                              },
+                              "amount": {
+                                "type": "integer",
+                                "example": 15000
+                              },
+                              "date": {
+                                "type": "string",
+                                "example": "2024-08-09T13:09:53.894Z"
+                              },
+                              "from_account_number": {
+                                "type": "string",
+                                "example": "null"
+                              },
+                              "to_account_number": {
+                                "type": "string",
+                                "example": "112233445566"
+                              },
+                              "type": {
+                                "type": "string",
+                                "example": "deposit"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/transactions/withdraw": {
+      "post": {
+        "tags": [
+          "transaction"
+        ],
+        "summary": "Create withdraw transaction",
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "description": "Create withdraw transaction",
+        "operationId": "createWithdrawTransaction",
+        "requestBody": {
+          "description": "Create a new withdraw transaction by passing request body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "from_account_number": {
+                    "type": "string",
+                    "example": "112233445588"
+                  },
+                  "amount": {
+                    "type": "integer",
+                    "example": 12000
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201 User": {
+            "description": "Create withdraw transaction by User access role",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "Success"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "Withdraw success and created"
+                      },
+                      "data": {
+                        "type": "object",
+                        "properties": {
+                          "transactions": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "example": "2d538c00-48e9-424b-a652-d2d11706640f"
+                              },
+                              "amount": {
+                                "type": "integer",
+                                "example": 15000
+                              },
+                              "date": {
+                                "type": "string",
+                                "example": "2024-08-09T13:09:53.894Z"
+                              },
+                              "from_account_number": {
+                                "type": "string",
+                                "example": "112233445566"
+                              },
+                              "to_account_number": {
+                                "type": "string",
+                                "example": "null"
+                              },
+                              "type": {
+                                "type": "string",
+                                "example": "deposit"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/transactions/transfer": {
+      "post": {
+        "tags": [
+          "transaction"
+        ],
+        "summary": "Create transfer transaction",
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "description": "Create transfer transaction",
+        "operationId": "createTransferTransaction",
+        "requestBody": {
+          "description": "Create a new transfer transaction by passing request body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "from_account_number": {
+                    "type": "string",
+                    "example": "112233445588"
+                  },
+                  "to_account_number": {
+                    "type": "string",
+                    "example": "112233445577"
+                  },
+                  "amount": {
+                    "type": "integer",
+                    "example": 12000
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201 User": {
+            "description": "Create transfer transaction by User access role",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "Success"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "Transfer success and created"
+                      },
+                      "data": {
+                        "type": "object",
+                        "properties": {
+                          "transactions": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "example": "2d538c00-48e9-424b-a652-d2d11706640f"
+                              },
+                              "amount": {
+                                "type": "integer",
+                                "example": 15000
+                              },
+                              "date": {
+                                "type": "string",
+                                "example": "2024-08-09T13:09:53.894Z"
+                              },
+                              "from_account_number": {
+                                "type": "string",
+                                "example": "112233445566"
+                              },
+                              "to_account_number": {
+                                "type": "string",
+                                "example": "112233445577"
+                              },
+                              "type": {
+                                "type": "string",
+                                "example": "deposit"
+                              }
+                            }
+                          }
                         }
                       }
                     }
@@ -606,55 +1875,6 @@
           "password": {
             "type": "string",
             "example": "123456!"
-          },
-          "identity_number": {
-            "type": "string",
-            "example": 6203111122223333
-          },
-          "identity_type": {
-            "type": "string",
-            "default": "KTP",
-            "enum": [
-              "KTP",
-              "KK",
-              "Passport"
-            ]
-          },
-          "phone_number": {
-            "type": "string",
-            "example": "081122334455"
-          },
-          "nationality": {
-            "type": "string",
-            "example": "US"
-          },
-          "job": {
-            "type": "string",
-            "example": "Web Developer"
-          },
-          "street": {
-            "type": "string",
-            "example": "Patih Rumbih"
-          },
-          "village": {
-            "type": "string",
-            "example": "Hampatung"
-          },
-          "postal_code": {
-            "type": "string",
-            "example": 73511
-          },
-          "city": {
-            "type": "string",
-            "example": "Kuala Kapuas"
-          },
-          "province": {
-            "type": "string",
-            "example": "Kalimantan Tengah"
-          },
-          "country": {
-            "type": "string",
-            "example": "Indonesia"
           }
         }
       },
@@ -706,10 +1926,6 @@
             "type": "string",
             "example": "764e40d6-696a-47e1-8ae7-c233142b732e"
           },
-          "bank_name": {
-            "type": "string",
-            "example": "Bank Binar"
-          },
           "number": {
             "type": "string",
             "example": 333211236951
@@ -722,11 +1938,17 @@
             "type": "float",
             "example": 10000000
           },
-          "account_type": {
-            "$ref": "#/components/schemas/Account_Type"
+          "bank_name": {
+            "type": "string",
+            "example": "Bank Binar"
           },
-          "user": {
-            "$ref": "#/components/schemas/User"
+          "user_id": {
+            "type": "string",
+            "example": "764e40d6-696a-47e1-8ae7-c233142b732e"
+          },
+          "account_type_id": {
+            "type": "int",
+            "example": 3
           }
         }
       }

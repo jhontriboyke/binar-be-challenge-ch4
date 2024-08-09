@@ -1,0 +1,14 @@
+type: object
+properties:
+  status:
+    type: string
+    example: error
+  message:
+    type: string
+    example: You cannot access this resource
+  status_code:
+    type: integer
+    example: 403
+  data:
+    type: object
+    properties:

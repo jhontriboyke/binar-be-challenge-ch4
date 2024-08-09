@@ -1,0 +1,34 @@
+tags:
+  - transaction
+summary: Create deposit transaction
+security:
+  - Authorization: []
+description: Create deposit transaction
+operationId: createDepositTransaction
+requestBody:
+  description: Create a new deposit transaction by passing request body
+  content:
+    application/json:
+      schema:
+        $ref: "../../components/CreateDeposit-body.yaml"
+responses:
+  "201 User":
+    description: Create deposit transaction by User access role
+    content:
+      application/json:
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+              status:
+                type: string
+                example: Success
+              message:
+                type: string
+                example: Deposit success and created
+              data:
+                type: object
+                properties:
+                  transactions:
+                    $ref: "../../components/CreateDeposit-res.yaml"

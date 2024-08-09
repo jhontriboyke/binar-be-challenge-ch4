@@ -1,5 +1,8 @@
 type: object
 properties:
+  id:
+    type: string
+    example: effee1ce-cd7d-4719-83f4-6cf18d97ad3b
   first_name:
     type: string
     example: Doe
@@ -9,6 +12,3 @@ properties:
   email:
     type: string
     example: johndoe@mail.com
-  password:
-    type: string
-    example: 123456!
