@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const { UserController } = require("../../controllers").V1_CONTROLLER;
 const validateUser = require("../../middlewares/validations/user-validation.middleware");
+const validateNewUser = require("../../middlewares/validations/new-user-validation.middleware");
 const authenticateToken = require("../../middlewares/auths/authenticate-token.middleware");
 const authorizeUser = require("../../middlewares/auths/authorize-user.middleware");
 const Role = require("../../_helpers/role");
@@ -24,7 +25,7 @@ router.get(
 );
 
 /* POST a new user */
-router.post("/", validateUser, UserController.createUser);
+router.post("/", validateNewUser, UserController.createUser);
 
 /* PUT to update a user by id */
 router.put(

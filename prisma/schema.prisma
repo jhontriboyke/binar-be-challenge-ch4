@@ -22,7 +22,7 @@ enum Role {
 model User {
   id         String     @id @default(uuid())
   first_name String
-  last_name  String
+  last_name  String?
   email      String     @unique
   password   String
   role       Role       @default(User)
@@ -47,28 +47,28 @@ enum Gender {
 }
 
 model Profile {
-  id              String        @id @default(uuid())
-  user_id         String        @unique
-  user            User          @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  date_of_birth   DateTime      @db.Date
-  gender          Gender
-  identity_type   Identity_Type
-  identity_number String        @unique
-  phone_number    String        @unique
-  occupation      String
-  nationality     String
+  id              String         @id @default(uuid())
+  user_id         String         @unique
+  user            User           @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  date_of_birth   DateTime?      @db.Date
+  gender          Gender?
+  identity_type   Identity_Type?
+  identity_number String?        @unique
+  phone_number    String?        @unique
+  occupation      String?
+  nationality     String?
 }
 
 model Address {
   id       String  @id @default(uuid())
   user_id  String
   user     User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  street   String
+  street   String?
   village  String?
-  zip_code String
-  city     String
-  province String
-  country  String
+  zip_code String?
+  city     String?
+  province String?
+  country  String?
 }
 
 model Account_Types {

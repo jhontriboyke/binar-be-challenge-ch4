@@ -8,6 +8,25 @@ class TransactionsModel {
     });
   }
 
+  async getTransactionsByAccountNumbers(arr_numbers) {
+    return await prisma.transaction.findMany({
+      where: {
+        OR: [
+          {
+            from_account_number: {
+              in: arr_numbers,
+            },
+          },
+          {
+            to_account_number: {
+              in: arr_numbers,
+            },
+          },
+        ],
+      },
+    });
+  }
+
   async findAccountAndUserData(account_number) {
     try {
       let account = await prisma.accounts.findUnique({

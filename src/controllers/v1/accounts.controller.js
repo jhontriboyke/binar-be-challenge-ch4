@@ -1,9 +1,9 @@
 const { AccountServices } = require("../../services/").V1_SERVICES;
 
 class AccountController {
-  async getAllAccounts(req, res) {
+  async getAllAccounts(req, res, next) {
     try {
-      const accounts = await AccountServices.getAllAccounts();
+      const accounts = await AccountServices.getAllAccounts(req.user.id);
 
       if (accounts.length === 0) {
         return res.success(200, "Accounts data are empty", {
@@ -11,7 +11,10 @@ class AccountController {
         });
       }
 
-      res.success(200, "Data retrieved succesfully", { accounts: accounts });
+      res.success(200, "Data retrieved succesfully", {
+        accounts: accounts,
+        total_accounts: accounts.length,
+      });
     } catch (error) {
       next(error);
     }
@@ -19,8 +22,13 @@ class AccountController {
 
   async getAccountById(req, res, next) {
     try {
-      const account_id = req.params.id;
-      const account = await AccountServices.getAccountById(account_id);
+      const account_id_from_param = req.params.id;
+      const user_id_from_token = req.user.id;
+
+      const account = await AccountServices.getAccountByIdWithRole(
+        account_id_from_param,
+        user_id_from_token
+      );
 
       res.success(200, "Account found", { account: account });
     } catch (error) {
@@ -30,24 +38,11 @@ class AccountController {
 
   async createAccount(req, res, next) {
     try {
-      const {
-        user_id,
-        account_type_id,
-        bank_name,
-        number,
-        pin_number,
-        balance,
-      } = req.body;
+      const user_id = req.user.id;
 
-      const account_obj = {
-        account_type_id,
-        bank_name,
-        number,
-        pin_number,
-        balance,
-      };
-
-      const account = await AccountServices.createAccount(user_id, account_obj);
+      const account = await AccountServices.createAccount(user_id, {
+        ...req.body,
+      });
 
       res.success(201, "Account created", { account: account });
     } catch (error) {

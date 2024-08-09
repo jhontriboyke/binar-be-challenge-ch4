@@ -3,7 +3,7 @@ const { ValidationError } = require("../../errors/customErrors");
 
 const validateUser = [
   check("first_name").notEmpty().withMessage("First name is required"),
-  check("last_name").notEmpty().withMessage("Last name is required"),
+  check("last_name").optional(),
   check("email").isEmail().withMessage("Provide a valid email"),
   check("password")
     .isLength({ min: 6 })

@@ -29,9 +29,6 @@ class UsersControllers {
         user_id_from_token
       );
 
-      console.log(user_from_param);
-      console.log(user_from_token);
-
       const user = await UserServices.getUserByIdWithRole(
         user_from_param,
         user_from_token
@@ -45,57 +42,7 @@ class UsersControllers {
 
   async createUser(req, res, next) {
     try {
-      const {
-        first_name,
-        last_name,
-        email,
-        password,
-        date_of_birth,
-        gender,
-        identity_type,
-        identity_number,
-        phone_number,
-        occupation,
-        nationality,
-        street,
-        village,
-        zip_code,
-        city,
-        province,
-        country,
-      } = req.body;
-
-      const user_obj = {
-        first_name,
-        last_name,
-        email,
-        password,
-      };
-
-      const profile_obj = {
-        date_of_birth,
-        gender,
-        identity_type,
-        identity_number,
-        phone_number,
-        occupation,
-        nationality,
-      };
-
-      const address_obj = {
-        street,
-        village,
-        zip_code,
-        city,
-        province,
-        country,
-      };
-
-      const new_user = await UserServices.createUser(
-        user_obj,
-        profile_obj,
-        address_obj
-      );
+      const new_user = await UserServices.createUser(req.body);
 
       res.success(201, "User created", { user: new_user });
     } catch (error) {

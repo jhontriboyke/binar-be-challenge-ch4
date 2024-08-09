@@ -64,7 +64,7 @@ class UserModel {
     });
   }
 
-  async createUser(user_obj, profile_obj, address_obj) {
+  async createUser(user_obj) {
     try {
       return await prisma.$transaction(async (prisma) => {
         const user = await prisma.user.create({
@@ -73,14 +73,25 @@ class UserModel {
 
         const profile = await prisma.profile.create({
           data: {
-            ...profile_obj,
+            date_of_birth: null,
+            gender: null,
+            identity_number: null,
+            identity_type: null,
+            nationality: null,
+            occupation: null,
+            phone_number: null,
             user_id: user.id,
           },
         });
 
         const address = await prisma.address.create({
           data: {
-            ...address_obj,
+            city: null,
+            country: null,
+            province: null,
+            street: null,
+            village: null,
+            zip_code: null,
             user_id: user.id,
           },
         });

@@ -17,6 +17,25 @@ class AccountsModel {
     });
   }
 
+  async getAllAccountsFromUserId(user_id) {
+    return await prisma.accounts.findMany({
+      where: {
+        user_id: user_id,
+      },
+      select: {
+        id: true,
+        number: true,
+        balance: true,
+        bank_name: true,
+        account_type: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
+  }
+
   async getAccountById(account_id) {
     return await prisma.accounts.findUnique({
       where: {
@@ -43,6 +62,14 @@ class AccountsModel {
             email: true,
           },
         },
+      },
+    });
+  }
+
+  async getAccountByUserId(user_id) {
+    return await prisma.accounts.findMany({
+      where: {
+        user_id: user_id,
       },
     });
   }

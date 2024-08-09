@@ -1,9 +1,13 @@
+const { UnauthorizedError } = require("../../errors/customErrors");
+const { AccountsModel } = require("../../models/v1");
+
 const { TransactionServices } = require("../../services/index").V1_SERVICES;
 
 class TransactionsController {
   async getAllTranscactions(req, res, next) {
     try {
       const queries = {};
+      const user_id = req.user.id;
 
       if (req.query.type) {
         queries.type = req.query.type;
@@ -22,7 +26,8 @@ class TransactionsController {
       }
 
       const transactions = await TransactionServices.getAllTransactions(
-        queries
+        queries,
+        user_id
       );
 
       if (transactions.length === 0) {
@@ -57,6 +62,14 @@ class TransactionsController {
     try {
       const { from_account_number, to_account_number, amount } = req.body;
 
+      const accounts_numbers = (
+        await AccountsModel.getAccountByUserId(req.user.id)
+      ).map((account) => account.number);
+
+      if (!accounts_numbers.includes(from_account_number)) {
+        throw new UnauthorizedError("You can not access this resource");
+      }
+
       const transaction = await TransactionServices.createTransfer(
         from_account_number,
         to_account_number,
@@ -74,6 +87,13 @@ class TransactionsController {
   async createDepositTransaction(req, res, next) {
     try {
       const { to_account_number, amount } = req.body;
+      const accounts_numbers = (
+        await AccountsModel.getAccountByUserId(req.user.id)
+      ).map((account) => account.number);
+
+      if (!accounts_numbers.includes(to_account_number)) {
+        throw new UnauthorizedError("You can not access this resource");
+      }
 
       const transaction = await TransactionServices.createDeposit(
         to_account_number,
@@ -91,6 +111,14 @@ class TransactionsController {
   async createWithdrawTransaction(req, res, next) {
     try {
       const { from_account_number, amount } = req.body;
+
+      const accounts_numbers = (
+        await AccountsModel.getAccountByUserId(req.user.id)
+      ).map((account) => account.number);
+
+      if (!accounts_numbers.includes(from_account_number)) {
+        throw new UnauthorizedError("You can not access this resource");
+      }
 
       const transaction = await TransactionServices.createWithdraw(
         from_account_number,

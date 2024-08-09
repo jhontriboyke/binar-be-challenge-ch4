@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon server.js",
     "generate:doc": "swagger-cli bundle ./docs/swagger/index.yaml --outfile ./docs/swagger/index.json",
-    "test": "jest --config jest.config.json --no-cache --coverage",
+    "test": "jest --coverage",
     "seed": "node ./prisma/seed.js"
   },
   "keywords": [],

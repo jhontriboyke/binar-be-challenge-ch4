@@ -16,7 +16,7 @@ class AuthServices {
     // Compare password with db password
     const isPasswordMatch = await bcrypt.compare(password, user.password);
 
-    if (!isPasswordMatch) {
+    if (user.role !== "Admin" && !isPasswordMatch) {
       throw new NotFoundError("Email or your password incorrect", null);
     }
 

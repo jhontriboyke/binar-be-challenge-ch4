@@ -34,24 +34,25 @@ class UserServices {
       return {
         id: user_from_param.id,
         email: user_from_param.email,
-        first_name: user_from_param.email,
-        last_name: user_from_param.email,
-        from: "Admin",
+        first_name: user_from_param.first_name,
+        last_name: user_from_param.last_name,
       };
     }
 
     if (user_from_token.role === "User") {
       // Check id from both user
       if (user_from_token.id !== user_from_param.id) {
+        // If not same
         throw new UnauthorizedError("You cannot access this resource");
       }
 
+      // if same
       return user_from_param;
     }
   }
 
   /* POST new user */
-  async createUser(user_obj, profile_obj, address_obj) {
+  async createUser(user_obj) {
     const { email, password } = user_obj;
 
     // Check if user already exist
@@ -61,44 +62,14 @@ class UserServices {
       throw new DuplicationError("User already exist", { email: email });
     }
 
-    const { identity_number, phone_number, date_of_birth } = profile_obj;
-
-    // Check if identity_number already exist
-    const identityNumber = await ProfileModel.getProfileByIdentityNumber(
-      identity_number
-    );
-
-    if (identityNumber) {
-      throw new DuplicationError("Identity number already exist", {});
-    }
-
-    // Check if phone_number already exist
-    const phoneNumber = await ProfileModel.getProfileByPhoneNumber(
-      phone_number
-    );
-
-    if (phoneNumber) {
-      throw new DuplicationError("Phone number already used", {});
-    }
-
     try {
       // Hash password
       const hashed_password = await bcrypt.hash(password, 10);
 
-      // Convert date_of_birth to ISOString
-      const converted_date_of_birth = new Date(date_of_birth).toISOString();
-
-      return await UserModel.createUser(
-        {
-          ...user_obj,
-          password: hashed_password,
-        },
-        {
-          ...profile_obj,
-          date_of_birth: converted_date_of_birth,
-        },
-        address_obj
-      );
+      return await UserModel.createUser({
+        ...user_obj,
+        password: hashed_password,
+      });
     } catch (error) {
       throw error;
     }

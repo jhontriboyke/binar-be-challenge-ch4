@@ -6,23 +6,55 @@ const account_types = [
   { name: "Deluxe", description: "The best among the bests" },
 ];
 
-async function init() {
-  const init_account_types = async () => {
-    try {
-      for (const type of account_types) {
-        await prisma.account_Types.create({
-          data: type,
-        });
-      }
-      console.log("Account types initialized successfully.");
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
+const valid_user_data = {
+  email: "jhontri@mail.com",
+  first_name: "jhontri",
+  last_name: "boyke",
+  password: "123456",
+};
 
-  // Call the init_account_types function with await
-  await init_account_types();
+const create_complete_user = async () => {
+  try {
+    await prisma.$transaction(async (prisma) => {
+      const user = await prisma.user.create({
+        data: valid_user_data,
+      });
+
+      await prisma.profile.create({
+        data: {},
+      });
+    });
+  } catch (error) {}
+};
+
+const init_account_types = async () => {
+  try {
+    for (const type of account_types) {
+      await prisma.account_Types.create({
+        data: type,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+async function generateAdmin() {
+  try {
+    await prisma.user.create({
+      data: {
+        email: "admin@mail.com",
+        first_name: "admin",
+        last_name: "admin",
+        password: "admin123",
+        role: "Admin",
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
 }
 
-// Run the init function
-init();
+// Run functions
+init_account_types();
+generateAdmin();

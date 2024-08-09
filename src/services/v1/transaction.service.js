@@ -1,12 +1,41 @@
-const { NotFoundError, ValidationError } = require("../../errors/customErrors");
+const {
+  NotFoundError,
+  ValidationError,
+  UnauthorizedError,
+} = require("../../errors/customErrors");
+const { UserModel } = require("../../models/v1");
 
 const { TransactionsModel, AccountsModel } =
   require("../../models/index").V1_MODELS;
 
 class TransactionServices {
   /* GET all transactions */
-  async getAllTransactions(queries) {
-    return await TransactionsModel.getAllTransactions(queries);
+  async getAllTransactions(queries, user_id) {
+    // Check user exist and its role
+    const user = await UserModel.getUserById(user_id);
+
+    if (!user) {
+      throw new UnauthorizedError("You can not access this resource");
+    }
+
+    if (user.role === "Admin") {
+      return await TransactionsModel.getAllTransactions(queries);
+    }
+
+    if (user.role === "User") {
+      // Get user account
+      const accounts = await AccountsModel.getAccountByUserId(user.id);
+
+      if (accounts.length === 0) {
+        throw new NotFoundError("You don't have any accounts", null);
+      }
+
+      const account_numbers = accounts.map((account) => account.number);
+
+      return await TransactionsModel.getTransactionsByAccountNumbers(
+        account_numbers
+      );
+    }
   }
 
   async showTransaction(type, data) {

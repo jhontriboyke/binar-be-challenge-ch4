@@ -2,7 +2,6 @@ const { check, validationResult } = require("express-validator");
 const { ValidationError } = require("../../errors/customErrors");
 
 const validateAccount = [
-  check("user_id").isUUID().withMessage("Please provide a valid user_id"),
   check("account_type_id")
     .isIn([1, 2, 3])
     .withMessage(
